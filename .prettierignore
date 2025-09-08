@@ -1,0 +1,12 @@
+.next
+.husky
+.turbo
+.prettierignore
+public
+node_modules
+next-env.d.ts
+next.config.ts
+.lintstagedrc.js
+pnpm-lock.yaml
+package-lock.json
+yarn.lock
