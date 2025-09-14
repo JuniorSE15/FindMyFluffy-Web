@@ -1,10 +1,10 @@
 'use client';
 
-import { HomeIcon, MapIcon, UserIcon, PlusIcon, BellIcon } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { HomeIcon, PlusIcon, MapIcon, BellIcon, UserIcon } from 'lucide-react';
 
-const BUTTOM_NAVBAR_ITEMS = [
+const BOTTOM_NAVBAR_ITEMS = [
   {
     label: 'Home',
     icon: <HomeIcon className='text-secondary-text' />,
@@ -49,7 +49,7 @@ export const BottomNavigationBar = () => {
       }}
     >
       <div className='flex w-full items-center justify-between'>
-        {BUTTOM_NAVBAR_ITEMS.map((item) =>
+        {BOTTOM_NAVBAR_ITEMS.map((item) =>
           item.href === '/new' ? (
             <div
               key={item.href}
