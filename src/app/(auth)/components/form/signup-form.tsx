@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import {
@@ -10,6 +9,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -21,7 +21,6 @@ import { Checkbox } from '@/components/ui/checkbox';
 
 export function SignUpForm() {
   const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
 
   const form = useForm<z.infer<typeof SignUpSchema>>({
     resolver: zodResolver(SignUpSchema),
@@ -29,12 +28,17 @@ export function SignUpForm() {
       fullName: '',
       email: '',
       password: '',
+      phoneNumber: '',
     },
   });
 
+  const onSubmit = (data: z.infer<typeof SignUpSchema>) => {
+    console.log(data);
+  };
+
   return (
     <Form {...form}>
-      <form className='w-full space-y-6'>
+      <form className='w-full space-y-6' onSubmit={form.handleSubmit(onSubmit)}>
         <FormField
           name='fullName'
           render={({ field }) => (
@@ -46,8 +50,10 @@ export function SignUpForm() {
                   id='fullName'
                   placeholder='full name'
                   className='bg-accent h-[54px] rounded-xl'
+                  {...field}
                 />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -62,8 +68,10 @@ export function SignUpForm() {
                   id='email'
                   placeholder='email'
                   className='bg-accent h-[54px] rounded-xl'
+                  {...field}
                 />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -79,6 +87,7 @@ export function SignUpForm() {
                     id='password'
                     placeholder='password'
                     className='bg-accent h-[54px] rounded-xl'
+                    {...field}
                   />
                   <div className='absolute top-1/2 right-4 -translate-y-1/2'>
                     {showPassword ? (
@@ -95,6 +104,25 @@ export function SignUpForm() {
                   </div>
                 </div>
               </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          name='phoneNumber'
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Phone Number</FormLabel>
+              <FormControl>
+                <Input
+                  type='text'
+                  id='phoneNumber'
+                  placeholder='09XXXXXXXX'
+                  className='bg-accent h-[54px] rounded-xl'
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -104,16 +132,15 @@ export function SignUpForm() {
             I agree with terms &amp; conditions
           </Label>
         </div>
-        <div className='mt-10 flex justify-center'>
+        <div className='mt-6 flex justify-center'>
           <Button
             type='submit'
             variant='outline'
             className='border-secondary-bg text-secondary-bg w-52 cursor-pointer rounded-full border-2 py-6 text-base font-medium transition-all duration-300 ease-in-out'
             size='lg'
-            disabled={loading}
-            onClick={() => setLoading(true)}
+            disabled={form.formState.isSubmitting}
           >
-            {loading ? (
+            {form.formState.isSubmitting ? (
               <>
                 <Loader2Icon size={24} className='animate-spin' />
                 <span>Signing up...</span>

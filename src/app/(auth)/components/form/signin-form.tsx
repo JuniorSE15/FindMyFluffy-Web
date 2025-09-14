@@ -10,6 +10,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -19,7 +20,6 @@ import { SignInSchema } from '@/schemas/auth.schema';
 
 export function SignInForm() {
   const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
 
   const form = useForm<z.infer<typeof SignInSchema>>({
     resolver: zodResolver(SignInSchema),
@@ -29,9 +29,13 @@ export function SignInForm() {
     },
   });
 
+  const onSubmit = (data: z.infer<typeof SignInSchema>) => {
+    console.log(data);
+  };
+
   return (
     <Form {...form}>
-      <form className='w-full space-y-6'>
+      <form className='w-full space-y-6' onSubmit={form.handleSubmit(onSubmit)}>
         <FormField
           name='email'
           render={({ field }) => (
@@ -43,8 +47,10 @@ export function SignInForm() {
                   id='email'
                   placeholder='email'
                   className='bg-accent h-[54px] rounded-xl'
+                  {...field}
                 />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -60,6 +66,7 @@ export function SignInForm() {
                     id='password'
                     placeholder='password'
                     className='bg-accent h-[54px] rounded-xl'
+                    {...field}
                   />
                   <div className='absolute top-1/2 right-4 -translate-y-1/2'>
                     {showPassword ? (
@@ -76,6 +83,7 @@ export function SignInForm() {
                   </div>
                 </div>
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -86,16 +94,15 @@ export function SignInForm() {
             </Button>
           </Link>
         </div>
-        <div className='mt-10 flex justify-center'>
+        <div className='mt-6 flex justify-center'>
           <Button
             type='submit'
             variant='default'
             className='bg-secondary-bg text-primary-foreground w-52 cursor-pointer rounded-full border-2 py-6 text-base font-medium transition-all duration-300 ease-in-out'
             size='lg'
-            disabled={loading}
-            onClick={() => setLoading(true)}
+            disabled={form.formState.isSubmitting}
           >
-            {loading ? (
+            {form.formState.isSubmitting ? (
               <>
                 <Loader2Icon size={24} className='animate-spin' />
                 <span>Signing in...</span>
