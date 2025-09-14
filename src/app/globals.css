@@ -41,10 +41,10 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
-  --interface-primary-bg: var(--interface-primary-bg);
-  --interface-secondary-bg: var(--interface-secondary-bg);
-  --primary-text: var(--primary-text);
-  --secondary-text: var(--secondary-text);
+  --color-primary-bg: var(--interface-primary-bg);
+  --color-secondary-bg: var(--interface-secondary-bg);
+  --color-primary-text: var(--primary-text);
+  --color-secondary-text: var(--secondary-text);
 }
 
 :root {
