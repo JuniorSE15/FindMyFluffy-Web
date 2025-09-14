@@ -28,7 +28,7 @@ export default function Onboarding() {
           alt='logo'
           width={100}
           height={100}
-          className='animate-in absolute top-[55%] right-0 h-auto w-24'
+          className='absolute top-[55%] right-0 h-auto w-24'
         />
       );
     }
