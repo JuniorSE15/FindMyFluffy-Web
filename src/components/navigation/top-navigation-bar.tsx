@@ -2,7 +2,6 @@
 
 import Image from 'next/image';
 import { motion } from 'motion/react';
-import { useState } from 'react';
 import {
   Dialog,
   DialogClose,
