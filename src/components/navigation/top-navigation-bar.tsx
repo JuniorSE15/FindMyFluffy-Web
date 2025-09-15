@@ -138,7 +138,7 @@ const Tabs = ({
       onClick={() => setActiveTab(tab)}
     >
       <span
-        className={`text-center text-lg font-bold transition-colors duration-300 ${activeTab === 'lost' ? 'text-primary-bg' : 'text-secondary-text'}`}
+        className={`text-center text-lg font-bold transition-colors duration-300 ${activeTab === tab ? 'text-primary-bg' : 'text-secondary-text'}`}
       >
         {label}
       </span>
