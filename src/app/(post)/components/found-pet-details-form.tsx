@@ -14,7 +14,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { FormPostFoundSchema } from '@/schemas/create_post_form.schema';
+import { FormPostFoundSchema } from '@/schemas/page.schema';
 import {
   Select,
   SelectContent,
@@ -22,10 +22,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { Input } from '@/components/ui/input';
 
 export default function FoundPetDetailsForm() {
   const form = useForm<z.infer<typeof FormPostFoundSchema>>({
     resolver: zodResolver(FormPostFoundSchema),
+    defaultValues: { Breed: '' },
   });
 
   return (
@@ -59,6 +61,25 @@ export default function FoundPetDetailsForm() {
               </FormItem>
             )}
           />
+          <FormField
+            control={form.control}
+            name='Breed'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Breed</FormLabel>
+                <FormControl>
+                  <Input
+                    type='text'
+                    id='breed'
+                    className='bg-accent h-[54px] rounded-xl'
+                    placeholder='e.g., Golden Retriever'
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          ></FormField>
         </form>
       </Card>
     </Form>

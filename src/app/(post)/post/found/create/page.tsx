@@ -1,6 +1,6 @@
 'use client';
+import FoundPetDetailsForm from '@/app/(post)/components/found-pet-details-form';
 import { Card } from '@/components/ui/card';
-import FoundPetDetailsForm from './components/FoundPetDetailsForm';
 
 export default function FoundReportPage() {
   return (
