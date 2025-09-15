@@ -1,9 +1,8 @@
 'use client';
 
+import { useState } from 'react';
 import { BottomNavigationBar } from '@/components/navigation/bottom-navigation-bar';
 import { TopNavigationBar } from '@/components/navigation/top-navigation-bar';
-import Image from 'next/image';
-import { useState } from 'react';
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<'lost' | 'found'>('lost');
