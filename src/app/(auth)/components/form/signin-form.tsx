@@ -98,7 +98,7 @@ export function SignInForm() {
           <Button
             type='submit'
             variant='default'
-            className='bg-secondary-bg text-primary-foreground w-52 cursor-pointer rounded-full border-2 py-6 text-base font-medium transition-all duration-300 ease-in-out'
+            className='bg-interface-secondary text-primary-foreground w-52 cursor-pointer rounded-full border-2 py-6 text-base font-medium transition-all duration-300 ease-in-out'
             size='lg'
             disabled={form.formState.isSubmitting}
           >

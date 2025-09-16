@@ -38,9 +38,10 @@ const LostFoundItem = ({
   onClose: () => void;
 }) => {
   return (
-    <motion.div
-      key='found'
-      className='bg-primary-bg flex h-20 w-20 cursor-pointer flex-col items-center justify-center gap-1 rounded-full p-4'
+    <motion.a
+      href='#'
+      key={type}
+      className='bg-interface-primary flex h-20 w-20 cursor-pointer flex-col items-center justify-center gap-1 rounded-full p-4'
       initial={{ opacity: 0, scale: 0 }}
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0 }}
@@ -64,6 +65,6 @@ const LostFoundItem = ({
         />
       )}
       <span className='text-sm font-bold text-white'>{type}</span>
-    </motion.div>
+    </motion.a>
   );
 };
