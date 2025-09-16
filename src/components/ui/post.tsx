@@ -14,7 +14,7 @@ export function Post({
   const petName = lost?.name ?? 'Unknown Pet';
   const bounty = lost?.bounty;
 
-  const title = is_lost ? `Help me find ${petName}!` : `Found ${petName}`;
+  const title = is_lost ? `${petName}!` : `${petName}`;
   const tag = is_lost ? `Lost ${type}` : `Found ${type}`;
 
   return (
