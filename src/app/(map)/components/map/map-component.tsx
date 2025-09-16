@@ -63,7 +63,7 @@ export default function MapComponent() {
       <Button
         variant='outline'
         size='icon'
-        className='absolute top-20 right-4 z-[1000]'
+        className='absolute top-20 right-4 z-50'
         onClick={locatCurrentLocation}
       >
         <MapPinIcon size={24} className='text-primary' />
