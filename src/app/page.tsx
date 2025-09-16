@@ -3,17 +3,28 @@
 import { useState } from 'react';
 import { BottomNavigationBar } from '@/components/navigation/bottom-navigation-bar';
 import { TopNavigationBar } from '@/components/navigation/top-navigation-bar';
+import { Post } from '@/components/ui/post';
+import { MOCK_FEED_POSTS } from '@/constants/post';
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<'lost' | 'found'>('lost');
+
+  const posts = MOCK_FEED_POSTS.filter((p) =>
+    activeTab === 'lost' ? p.is_lost : !p.is_lost,
+  );
+
   return (
-    <div className='relative flex min-h-screen flex-col items-center justify-center'>
+    <div className='relative flex min-h-screen flex-col'>
       <div className='sticky top-0 left-0 z-50 w-full'>
         <TopNavigationBar activeTab={activeTab} setActiveTab={setActiveTab} />
       </div>
-      <div className='flex-1'>
-        <h1>Find My Fluffy</h1>
-      </div>
+      <main className='flex-1 px-4 py-4'>
+        <div className='mx-auto w-full max-w-xl space-y-4'>
+          {posts.map((post) => (
+            <Post key={post.id} {...post} />
+          ))}
+        </div>
+      </main>
       <div className='sticky bottom-0 left-0 z-50 w-full'>
         <BottomNavigationBar />
       </div>
