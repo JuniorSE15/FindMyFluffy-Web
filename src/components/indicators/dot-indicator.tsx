@@ -17,7 +17,7 @@ export const DotIndicator: React.FC<DotIndicatorProps> = ({
       {Array.from({ length: total }).map((_, i) => (
         <motion.div
           key={i}
-          className={`h-2 rounded-full ${index === i ? 'bg-secondary-bg' : 'bg-[#D9D9D9]'}`}
+          className={`h-2 rounded-full ${index === i ? 'bg-interface-secondary' : 'bg-[#D9D9D9]'}`}
           animate={{
             width: index === i ? 24 : 8,
           }}

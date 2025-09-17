@@ -57,6 +57,7 @@ export const TopNavigationBar = ({
 };
 
 const Tabs = ({ label, tab, activeTab, setActiveTab }: TabsProps) => {
+    
   return (
     <motion.div
       animate={{
@@ -73,7 +74,7 @@ const Tabs = ({ label, tab, activeTab, setActiveTab }: TabsProps) => {
       onClick={() => setActiveTab(tab)}
     >
       <span
-        className={`text-center text-lg font-bold transition-colors duration-300 ${activeTab === tab ? 'text-primary-bg' : 'text-secondary-text'}`}
+        className={`text-center text-lg font-bold transition-colors duration-300 ${activeTab === tab ? 'text-interface-primary' : 'text-secondary-text'}`}
       >
         {label}
       </span>

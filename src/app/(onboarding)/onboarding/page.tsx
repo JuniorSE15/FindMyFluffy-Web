@@ -54,8 +54,8 @@ export default function Onboarding() {
         </div>
         <div className='flex flex-col gap-2'>
           <h1 className='text-primary-text text-center text-[2rem] leading-10 font-bold'>
-            Find a <span className='text-primary-bg'>Lost Pet</span> <br /> Near
-            You!
+            Find a <span className='text-interface-primary'>Lost Pet</span>{' '}
+            <br /> Near You!
           </h1>
           <p className='text-secondary-text text-center text-sm font-normal'>
             {ONBOARDING_DETAILS[page].description}
@@ -63,7 +63,7 @@ export default function Onboarding() {
         </div>
         <div className='space-y-4'>
           <Button
-            className={`bg-secondary-bg text-primary-foreground hover:bg-secondary-bg/80 w-64 cursor-pointer rounded-full py-6 transition-all duration-300 ease-in-out ${
+            className={`bg-interface-secondary text-primary-foreground hover:bg-interface-secondary/80 w-64 cursor-pointer rounded-full py-6 transition-all duration-300 ease-in-out ${
               page === ONBOARDING_DETAILS.length - 1 ? 'size-[100px]' : ''
             }`}
             size='lg'

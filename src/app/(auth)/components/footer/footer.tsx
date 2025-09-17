@@ -33,7 +33,7 @@ export const Footer: React.FC<{
           ? "Don't have an account?"
           : 'Already have an account?'}
         <Link href={type === 'signin' ? '/signup' : '/signin'}>
-          <Button variant='link' className='text-primary-bg pr-0'>
+          <Button variant='link' className='text-interface-primary pr-0'>
             {type === 'signin' ? 'Sign Up' : 'Sign In'}
           </Button>
         </Link>
