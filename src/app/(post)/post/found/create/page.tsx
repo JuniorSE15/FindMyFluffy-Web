@@ -45,7 +45,7 @@ export default function FoundReportPage() {
   };
 
   return (
-    <div className='relative flex h-full min-h-screen w-full flex-col justify-start px-2 py-6 md:px-10'>
+    <div className='relative mx-auto flex h-full min-h-screen w-full max-w-xl flex-col justify-start rounded-lg px-2 py-6 shadow-2xl md:px-10'>
       <TopBarPostForm
         onPost={() => form.handleSubmit(onSubmit)()}
         onClose={() => router.back()}
