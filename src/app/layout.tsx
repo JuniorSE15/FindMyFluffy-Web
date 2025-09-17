@@ -31,9 +31,11 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <body
-        className={`${poppins.variable} mx-auto min-h-screen w-full antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <div className='flex min-h-screen items-center justify-center'>
+          <div className='w-full max-w-xl flex-col shadow-md'>{children}</div>
+        </div>
       </body>
     </html>
   );
