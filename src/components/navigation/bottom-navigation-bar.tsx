@@ -14,10 +14,10 @@ const BUTTOM_NAVBAR_ITEMS = [
     href: '/',
   },
   {
-    label: 'Maps',
+    label: 'Map',
     icon: <MapIcon className='text-secondary-text' />,
-    activeIcon: <MapIcon className='text-interface-secondary' />,
-    href: '/maps',
+    activeIcon: <MapIcon className='text-secondary-bg' />,
+    href: '/map',
   },
   {
     label: 'New',
