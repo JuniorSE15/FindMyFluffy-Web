@@ -101,7 +101,10 @@ const SearchDialog = () => {
         </div>
         <DialogFooter>
           <DialogClose asChild>
-            <Button type='submit' className='bg-primary-bg w-full rounded-full'>
+            <Button
+              type='submit'
+              className='bg-interface-primary w-full rounded-full'
+            >
               Search
             </Button>
           </DialogClose>
@@ -138,7 +141,7 @@ const Tabs = ({
       onClick={() => setActiveTab(tab)}
     >
       <span
-        className={`text-center text-lg font-bold transition-colors duration-300 ${activeTab === tab ? 'text-primary-bg' : 'text-secondary-text'}`}
+        className={`text-center text-lg font-bold transition-colors duration-300 ${activeTab === tab ? 'text-interface-primary' : 'text-secondary-text'}`}
       >
         {label}
       </span>

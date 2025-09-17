@@ -41,6 +41,8 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+  --color-interface-primary: var(--interface-primary-bg);
+  --color-interface-secondary: var(--interface-secondary-bg);
   --color-primary-bg: var(--interface-primary-bg);
   --color-secondary-bg: var(--interface-secondary-bg);
   --color-primary-text: var(--primary-text);
