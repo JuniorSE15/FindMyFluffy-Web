@@ -6,9 +6,8 @@ interface AuthStore {
   session: Session | null;
   setSession: (session: Session | null) => void;
   accessToken: string | null;
-  setAccessToken: (accessToken: string | null) => void;
   refreshToken: string | null;
-  setRefreshToken: (refreshToken: string | null) => void;
+  setToken: (accessToken: string | null, refreshToken: string | null) => void;
   isAuthenticated: boolean;
   setIsAuthenticated: (isAuthenticated: boolean) => void;
   logout: () => void;
@@ -22,8 +21,8 @@ export const useAuthStore = create<AuthStore>()(
       refreshToken: null,
       isAuthenticated: false,
       setSession: (session) => set({ session }),
-      setAccessToken: (accessToken) => set({ accessToken }),
-      setRefreshToken: (refreshToken) => set({ refreshToken }),
+      setToken: (accessToken, refreshToken) =>
+        set({ accessToken, refreshToken }),
       setIsAuthenticated: (isAuthenticated) => set({ isAuthenticated }),
       logout: () =>
         set({

@@ -1,6 +1,7 @@
 'use server';
 
 import { cookies } from 'next/headers';
+import { refreshTokenAction } from './auth.service';
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5259';
 
@@ -54,6 +55,35 @@ export async function baseApiAction<T>(
             ? JSON.stringify(body)
             : undefined,
     });
+
+    if (response.status === 401) {
+      const cookieStore = await cookies();
+      const refreshToken = cookieStore.get('refresh_token')?.value;
+      if (refreshToken) {
+        console.log('Refreshing token');
+        try {
+          const response = await refreshTokenAction();
+          if (response?.accessToken.value && response?.refreshToken.value) {
+            cookieStore.set('access_token', response.accessToken.value);
+            cookieStore.set('refresh_token', response.refreshToken.value);
+            return baseApiAction(endpoint, config);
+          }
+        } catch (error) {
+          console.error('Refresh token error:', error);
+          cookieStore.delete('access_token');
+          cookieStore.delete('refresh_token');
+          return {
+            error: {
+              statusCode: 401,
+              message: 'Unauthorized',
+              detail: 'Refresh token error',
+              path: endpoint,
+              timestamp: new Date().toISOString(),
+            },
+          };
+        }
+      }
+    }
 
     const contentType = response.headers.get('Content-Type');
     let data;
