@@ -2,13 +2,14 @@
 
 import { cookies } from 'next/headers';
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5259';
 
 type ApiResponse<T> = {
   data?: T;
   error?: {
     statusCode: number;
     message: string;
+    detail?: string;
     path: string;
     timestamp: string;
   };
@@ -60,15 +61,6 @@ export async function baseApiAction<T>(
     if (contentType && contentType.includes('application/json')) {
       try {
         data = await response.json();
-        return {
-          data,
-          error: {
-            statusCode: response.status,
-            message: response.statusText,
-            path: endpoint,
-            timestamp: new Date().toISOString(),
-          },
-        };
       } catch (error) {
         console.error('Invalid JSON response:', error);
         data = null;
@@ -80,10 +72,22 @@ export async function baseApiAction<T>(
     }
 
     if (!response.ok) {
+      let errorDetails: string | undefined;
+
+      if (data && typeof data === 'object' && 'errors' in data) {
+        const errors = (data as { errors: string[] }).errors;
+        if (Array.isArray(errors)) {
+          errorDetails = errors.join(' ');
+        } else {
+          errorDetails = String(errors);
+        }
+      }
+
       return {
         error: {
           statusCode: response.status,
           message: response.statusText,
+          detail: errorDetails,
           path: endpoint,
           timestamp: new Date().toISOString(),
         },
