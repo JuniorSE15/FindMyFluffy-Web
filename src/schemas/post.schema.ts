@@ -1,14 +1,10 @@
-import { Microchip } from 'lucide-react';
 import { z } from 'zod';
 
 export const FormPostLostSchema = z.object({
   petName: z.string().min(1, { message: 'Pet name is required' }),
   petType: z.string().min(1, { message: 'Pet type is required' }),
   breed: z.string().optional(),
-  age: z
-    .uint32()
-    .min(1, { message: 'Age must be a positive number' })
-    .optional(),
+  age: z.transform(Number).pipe(z.number().min(1, 'Pet Age is required')),
   gender: z.enum(['Male', 'Female', 'Unknown'], {
     message: 'Gender is required',
   }),
