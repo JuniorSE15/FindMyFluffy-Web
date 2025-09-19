@@ -30,7 +30,7 @@ export default function FoundPetDetailsForm({
   form,
 }: FoundPetDetailsFormProps) {
   const handleImagesChange = (files: File[]) => {
-    form.setValue('Images', files);
+    form.setValue('images', files);
   };
 
   return (
@@ -43,7 +43,7 @@ export default function FoundPetDetailsForm({
         <div className='mt-2 flex w-full flex-col gap-4'>
           <FormField
             control={form.control}
-            name='Images'
+            name='images'
             render={() => (
               <FormItem>
                 <FormControl>
@@ -68,7 +68,7 @@ export default function FoundPetDetailsForm({
         <div className='mt-2 flex w-full flex-col gap-4'>
           <FormField
             control={form.control}
-            name='PetType'
+            name='petType'
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Pet Type</FormLabel>
@@ -92,7 +92,7 @@ export default function FoundPetDetailsForm({
           />
           <FormField
             control={form.control}
-            name='Breed'
+            name='breed'
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Breed</FormLabel>
@@ -111,7 +111,7 @@ export default function FoundPetDetailsForm({
           />
           <FormField
             control={form.control}
-            name='Gender'
+            name='gender'
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Gender</FormLabel>
@@ -136,7 +136,7 @@ export default function FoundPetDetailsForm({
           />
           <FormField
             control={form.control}
-            name='Description'
+            name='description'
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Description</FormLabel>
@@ -163,7 +163,7 @@ export default function FoundPetDetailsForm({
         <div className='mt-2 flex w-full flex-col gap-4'>
           <FormField
             control={form.control}
-            name='LastSeenLocation'
+            name='lastSeenLocation'
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Last Seen Location</FormLabel>
@@ -182,7 +182,7 @@ export default function FoundPetDetailsForm({
           <div className='grid grid-cols-2 gap-4'>
             <FormField
               control={form.control}
-              name='DateLost'
+              name='dateFound'
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Date Found</FormLabel>
@@ -199,7 +199,7 @@ export default function FoundPetDetailsForm({
             />
             <FormField
               control={form.control}
-              name='TimeLost'
+              name='timeFound'
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Time Found</FormLabel>
@@ -217,7 +217,7 @@ export default function FoundPetDetailsForm({
           </div>
           <FormField
             control={form.control}
-            name='SocialMediaLink'
+            name='socialMediaLink'
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Social Media Link (Optional)</FormLabel>
