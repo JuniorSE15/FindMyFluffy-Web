@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import { AlertCircle, Share } from 'lucide-react';
-import { type Post as PostType, MOCK_LOST_POSTS } from '@/constants/post';
+import { type Post as PostType } from '@/types/post';
+import { MOCK_LOST_POSTS } from '@/constants/post';
 
 export function Post({
   id,

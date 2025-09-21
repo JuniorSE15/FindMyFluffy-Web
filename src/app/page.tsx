@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { BottomNavigationBar } from '@/components/navigation/bottom-navigation-bar';
 import { TopNavigationBar } from '@/components/navigation/top-navigation-bar';
-import { Post } from '@/components/ui/post';
+import { Post } from '@/components/post/post';
 import { MOCK_FEED_POSTS } from '@/constants/post';
 
 export default function Home() {
