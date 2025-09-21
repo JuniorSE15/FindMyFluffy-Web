@@ -18,37 +18,43 @@ import { EyeIcon, EyeOffIcon, Loader2Icon } from 'lucide-react';
 import { SignUpSchema } from '@/schemas/auth.schema';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
+import { useAuth } from '@/hooks/useAuth';
 
 export function SignUpForm() {
+  const { registerMutation, isRegisterPending } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
 
   const form = useForm<z.infer<typeof SignUpSchema>>({
     resolver: zodResolver(SignUpSchema),
     defaultValues: {
-      fullName: '',
+      userName: '',
       email: '',
       password: '',
       phoneNumber: '',
     },
   });
 
-  const onSubmit = (data: z.infer<typeof SignUpSchema>) => {
-    console.log(data);
+  const onSubmit = async (data: z.infer<typeof SignUpSchema>) => {
+    try {
+      registerMutation(data);
+    } catch (error) {
+      console.error('Registration failed: ', error);
+    }
   };
 
   return (
     <Form {...form}>
       <form className='w-full space-y-6' onSubmit={form.handleSubmit(onSubmit)}>
         <FormField
-          name='fullName'
+          name='userName'
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Full Name</FormLabel>
+              <FormLabel>User Name</FormLabel>
               <FormControl>
                 <Input
                   type='text'
-                  id='fullName'
-                  placeholder='full name'
+                  id='userName'
+                  placeholder='user name'
                   className='bg-accent h-[54px] rounded-xl'
                   {...field}
                 />
@@ -138,9 +144,9 @@ export function SignUpForm() {
             variant='outline'
             className='border-secondary-bg text-interface-secondary w-52 cursor-pointer rounded-full border-2 py-6 text-base font-medium transition-all duration-300 ease-in-out'
             size='lg'
-            disabled={form.formState.isSubmitting}
+            disabled={form.formState.isSubmitting || isRegisterPending}
           >
-            {form.formState.isSubmitting ? (
+            {form.formState.isSubmitting || isRegisterPending ? (
               <>
                 <Loader2Icon size={24} className='animate-spin' />
                 <span>Signing up...</span>
