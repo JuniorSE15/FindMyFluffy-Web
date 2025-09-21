@@ -1,7 +1,7 @@
 'use server';
 
 import { cookies } from 'next/headers';
-import { refreshTokenAction } from './auth.service';
+import { refreshTokenAction } from './token.service';
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5259';
 
@@ -63,7 +63,7 @@ export async function baseApiAction<T>(
         console.log('Refreshing token');
         try {
           const response = await refreshTokenAction();
-          if (response?.accessToken.value && response?.refreshToken.value) {
+          if (response?.accessToken?.value && response?.refreshToken?.value) {
             cookieStore.set('access_token', response.accessToken.value);
             cookieStore.set('refresh_token', response.refreshToken.value);
             return baseApiAction(endpoint, config);

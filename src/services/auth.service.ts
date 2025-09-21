@@ -75,27 +75,6 @@ export async function getSessionAction() {
   }
 }
 
-export async function refreshTokenAction() {
-  try {
-    const response = await baseApiAction<AuthResponseDto>(
-      `${BASE_ENDPOINT}/refresh`,
-      {
-        method: 'POST',
-        requiresAuth: true,
-      },
-    );
-
-    if (response.error) {
-      throw new Error(response.error.detail);
-    }
-
-    return response.data;
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
-}
-
 export async function logoutAction() {
   try {
     const response = await baseApiAction<null>(`${BASE_ENDPOINT}/logout`, {
