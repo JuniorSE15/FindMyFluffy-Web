@@ -15,6 +15,7 @@ export default function LostReportPage() {
   const form = useForm<z.infer<typeof FormPostLostSchema>>({
     resolver: zodResolver(FormPostLostSchema),
     defaultValues: {
+      title: '',
       petName: '',
       age: 0,
       breed: '',

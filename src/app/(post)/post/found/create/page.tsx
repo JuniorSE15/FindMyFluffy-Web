@@ -14,6 +14,7 @@ export default function FoundReportPage() {
   const form = useForm<z.infer<typeof FormPostFoundSchema>>({
     resolver: zodResolver(FormPostFoundSchema),
     defaultValues: {
+      title: '',
       breed: '',
       gender: 'Unknown',
       petType: '',

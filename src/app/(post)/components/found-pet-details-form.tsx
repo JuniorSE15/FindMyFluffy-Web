@@ -22,6 +22,12 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import UploadPicture from './upload-picture';
 
+import dynamic from 'next/dynamic';
+
+const MapPicker = dynamic(() => import('./map-picker'), {
+  ssr: false,
+});
+
 interface FoundPetDetailsFormProps {
   form: UseFormReturn<z.infer<typeof FormPostFoundSchema>>;
 }
@@ -35,6 +41,33 @@ export default function FoundPetDetailsForm({
 
   return (
     <>
+      {/* Title Section */}
+      <Card className='mt-6 flex w-full flex-col gap-2 p-4'>
+        <h1 className='text-primary-text text-left text-2xl font-bold'>
+          Post Title
+        </h1>
+        <div className='mt-2 flex w-full flex-col gap-4'>
+          <FormField
+            control={form.control}
+            name='title'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Title</FormLabel>
+                <FormControl>
+                  <Input
+                    type='text'
+                    className='bg-accent rounded-xl'
+                    placeholder='e.g., Found Golden Retriever near Central Park'
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+      </Card>
+
       {/* Upload Pictures Section */}
       <Card className='mt-6 flex w-full flex-col gap-2 p-4'>
         <h1 className='text-primary-text text-left text-2xl font-bold'>
@@ -175,6 +208,18 @@ export default function FoundPetDetailsForm({
                     {...field}
                   />
                 </FormControl>
+                <div className='h-64 w-full overflow-hidden rounded-xl'>
+                  <MapPicker
+                    address={field.value}
+                    onAddressChange={(address) =>
+                      form.setValue('lastSeenLocation', address)
+                    }
+                    onLatLngChange={(lat, lng) => {
+                      form.setValue('lastSeenLat', lat);
+                      form.setValue('lastSeenLng', lng);
+                    }}
+                  />
+                </div>
                 <FormMessage />
               </FormItem>
             )}
