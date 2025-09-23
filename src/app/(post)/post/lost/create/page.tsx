@@ -1,7 +1,7 @@
 'use client';
 
 import { useForm } from 'react-hook-form';
-import LostPetDetailsForm from '@/app/(post)/components/lost-pet-detils-form';
+import LostPetDetailsForm from '@/app/(post)/components/lost-pet-details-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { TopBarPostForm } from '@/app/(post)/components/top-bar';
 import { FormPostLostSchema } from '@/schemas/post.schema';

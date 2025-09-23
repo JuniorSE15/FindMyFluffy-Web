@@ -206,6 +206,12 @@ export default function FoundPetDetailsForm({
                     className='bg-accent rounded-xl'
                     placeholder='e.g., Central Park, New York'
                     {...field}
+                    onChange={(e) => {
+                      form.setValue('lastSeenLocation', e.target.value);
+                      window.dispatchEvent(
+                        new CustomEvent('manual-address-edit'),
+                      );
+                    }}
                   />
                 </FormControl>
                 <div className='h-64 w-full overflow-hidden rounded-xl'>
@@ -214,9 +220,9 @@ export default function FoundPetDetailsForm({
                     onAddressChange={(address) =>
                       form.setValue('lastSeenLocation', address)
                     }
-                    onLatLngChange={(lat, lng) => {
-                      form.setValue('lastSeenLat', lat);
-                      form.setValue('lastSeenLng', lng);
+                    onLatLngChange={(latLng) => {
+                      form.setValue('lastSeenLat', latLng.lat);
+                      form.setValue('lastSeenLng', latLng.lng);
                     }}
                   />
                 </div>
@@ -235,6 +241,8 @@ export default function FoundPetDetailsForm({
                     <Input
                       type='date'
                       className='bg-accent rounded-xl'
+                      max={new Date().toISOString().split('T')[0]}
+                      min='2000-01-01'
                       {...field}
                     />
                   </FormControl>

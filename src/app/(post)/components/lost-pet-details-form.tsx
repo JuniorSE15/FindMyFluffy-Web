@@ -22,6 +22,8 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import UploadPicture from './upload-picture';
 import 'leaflet/dist/leaflet.css';
+import { Button } from '@/components/ui/button';
+import { CalendarIcon } from 'lucide-react';
 
 import dynamic from 'next/dynamic';
 
@@ -247,7 +249,6 @@ export default function LostPetDetailsForm({ form }: LostPetDetailsFormProps) {
         </div>
       </Card>
 
-      {/* Location and Time Section (Might separate this into another component) */}
       <Card className='mt-6 flex w-full flex-col gap-2 p-4'>
         <h1 className='text-primary-text text-left text-2xl leading-10 font-bold'>
           Time and Location
@@ -265,17 +266,23 @@ export default function LostPetDetailsForm({ form }: LostPetDetailsFormProps) {
                     className='bg-accent rounded-xl'
                     placeholder='e.g., Central Park, New York'
                     {...field}
+                    onChange={(e) => {
+                      form.setValue('lastSeenLocation', e.target.value);
+                      window.dispatchEvent(
+                        new CustomEvent('manual-address-edit'),
+                      );
+                    }}
                   />
                 </FormControl>
-                <div className='h-64 w-full overflow-hidden rounded-xl'>
+                <div className='relative z-10 h-64 w-full overflow-hidden rounded-xl'>
                   <MapPicker
                     address={field.value}
                     onAddressChange={(address) =>
                       form.setValue('lastSeenLocation', address)
                     }
-                    onLatLngChange={(lat, lng) => {
-                      form.setValue('lastSeenLat', lat);
-                      form.setValue('lastSeenLng', lng);
+                    onLatLngChange={(latLng) => {
+                      form.setValue('lastSeenLat', latLng.lat);
+                      form.setValue('lastSeenLng', latLng.lng);
                     }}
                   />
                 </div>
@@ -294,6 +301,8 @@ export default function LostPetDetailsForm({ form }: LostPetDetailsFormProps) {
                     <Input
                       type='date'
                       className='bg-accent rounded-xl'
+                      max={new Date().toISOString().split('T')[0]}
+                      min='2000-01-01'
                       {...field}
                     />
                   </FormControl>
