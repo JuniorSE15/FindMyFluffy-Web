@@ -1,15 +1,10 @@
 'use client';
-import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useState, useRef, useCallback } from 'react';
-import { Upload, X, Image as ImageIcon } from 'lucide-react';
-import Image from 'next/image';
+import { Upload, Plus } from 'lucide-react';
+import CustomCarousel, { CarouselItem } from './custom-carousel';
 
-interface UploadedFile {
-  id: string;
-  file: File;
-  preview: string;
-}
+type UploadedFile = CarouselItem;
 
 interface UploadPictureProps {
   onFilesChange?: (files: File[]) => void;
@@ -27,6 +22,7 @@ export default function UploadPicture({
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
   const [isDragOver, setIsDragOver] = useState(false);
   const [error, setError] = useState<string>('');
+  const [currentCarouselIndex, setCurrentCarouselIndex] = useState(0);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const validateFile = useCallback(
@@ -88,6 +84,11 @@ export default function UploadPicture({
       const updatedFiles = [...uploadedFiles, ...newFiles];
       setUploadedFiles(updatedFiles);
 
+      // Navigate to the first newly uploaded image
+      if (newFiles.length > 0) {
+        setCurrentCarouselIndex(uploadedFiles.length);
+      }
+
       // Notify parent component
       if (onFilesChange) {
         onFilesChange(updatedFiles.map((f) => f.file));
@@ -147,45 +148,48 @@ export default function UploadPicture({
 
   return (
     <div className='space-y-4'>
-      {/* Upload Area */}
-      <div
-        className={`relative cursor-pointer rounded-xl border-2 border-dashed p-8 text-center transition-colors ${
-          isDragOver
-            ? 'border-primary bg-primary/5'
-            : 'border-border hover:border-primary/50 hover:bg-accent/50'
-        } `}
-        onDragOver={handleDragOver}
-        onDragLeave={handleDragLeave}
-        onDrop={handleDrop}
-        onClick={openFileDialog}
-      >
-        <input
-          ref={fileInputRef}
-          type='file'
-          multiple
-          accept={acceptedTypes.join(',')}
-          onChange={handleFileSelect}
-          className='hidden'
-        />
-
-        <div className='flex flex-col items-center gap-4'>
-          <div className='bg-accent rounded-full p-4'>
-            <Upload className='text-muted-foreground h-8 w-8' />
-          </div>
-          <div className='space-y-2'>
-            <p className='text-primary-text text-lg font-medium'>
-              Drag & drop your images here
-            </p>
-            <p className='text-secondary-text text-sm'>
-              or click to browse files
-            </p>
-            <p className='text-muted-foreground text-xs'>
-              Supports JPEG, PNG, WebP • Max {maxFileSize}MB per file • Up to{' '}
-              {maxFiles} files
-            </p>
+      {/* Upload Area - Only show when no images are uploaded */}
+      {uploadedFiles.length === 0 && (
+        <div
+          className={`relative cursor-pointer rounded-xl border-2 border-dashed p-8 text-center transition-colors ${
+            isDragOver
+              ? 'border-primary bg-primary/5'
+              : 'border-border hover:border-primary/50 hover:bg-accent/50'
+          } `}
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          onDrop={handleDrop}
+          onClick={openFileDialog}
+        >
+          <div className='flex flex-col items-center gap-4'>
+            <div className='bg-accent rounded-full p-4'>
+              <Upload className='text-muted-foreground h-8 w-8' />
+            </div>
+            <div className='space-y-2'>
+              <p className='text-primary-text text-lg font-medium'>
+                Drag & drop your images here
+              </p>
+              <p className='text-secondary-text text-sm'>
+                or click to browse files
+              </p>
+              <p className='text-muted-foreground text-xs'>
+                Supports JPEG, PNG, WebP • Max {maxFileSize}MB per file • Up to{' '}
+                {maxFiles} files
+              </p>
+            </div>
           </div>
         </div>
-      </div>
+      )}
+
+      {/* Hidden file input - always available */}
+      <input
+        ref={fileInputRef}
+        type='file'
+        multiple
+        accept={acceptedTypes.join(',')}
+        onChange={handleFileSelect}
+        className='hidden'
+      />
 
       {/* Error Message */}
       {error && (
@@ -201,11 +205,31 @@ export default function UploadPicture({
             <h3 className='text-primary-text text-sm font-medium'>
               Uploaded Images ({uploadedFiles.length}/{maxFiles})
             </h3>
-            {uploadedFiles.length > 0 && (
+            <div className='flex items-center gap-2'>
+              {/* Add More Button */}
+              {uploadedFiles.length < maxFiles && (
+                <Button
+                  type='button'
+                  variant='outline'
+                  size='sm'
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    openFileDialog();
+                  }}
+                  className='h-8 text-xs'
+                >
+                  <Plus className='mr-1 h-3 w-3' />
+                  Add
+                </Button>
+              )}
               <Button
+                type='button'
                 variant='outline'
                 size='sm'
-                onClick={() => {
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
                   uploadedFiles.forEach((file) =>
                     URL.revokeObjectURL(file.preview),
                   );
@@ -217,65 +241,15 @@ export default function UploadPicture({
               >
                 Clear All
               </Button>
-            )}
-          </div>
-
-          <div className='grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4'>
-            {uploadedFiles.map((uploadedFile) => (
-              <Card
-                key={uploadedFile.id}
-                className='group relative overflow-hidden'
-              >
-                <div className='relative aspect-square'>
-                  <Image
-                    src={uploadedFile.preview}
-                    alt={uploadedFile.file.name}
-                    fill
-                    className='object-cover'
-                  />
-                  <div className='absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 transition-opacity group-hover:opacity-100'>
-                    <Button
-                      variant='destructive'
-                      size='sm'
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        removeFile(uploadedFile.id);
-                      }}
-                      className='h-8 w-8 p-0'
-                    >
-                      <X className='h-4 w-4' />
-                    </Button>
-                  </div>
-                </div>
-                <div className='p-2'>
-                  <p className='text-secondary-text truncate text-xs'>
-                    {uploadedFile.file.name}
-                  </p>
-                  <p className='text-muted-foreground text-xs'>
-                    {(uploadedFile.file.size / 1024 / 1024).toFixed(1)} MB
-                  </p>
-                </div>
-              </Card>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Empty State for Images */}
-      {uploadedFiles.length === 0 && !error && (
-        <Card className='p-8 text-center'>
-          <div className='flex flex-col items-center gap-3'>
-            <ImageIcon className='text-muted-foreground h-12 w-12' />
-            <div>
-              <p className='text-primary-text text-sm font-medium'>
-                No images uploaded yet
-              </p>
-              <p className='text-secondary-text text-xs'>
-                Add some photos to help people identify the pet
-              </p>
             </div>
           </div>
-        </Card>
+
+          <CustomCarousel
+            files={uploadedFiles}
+            onRemoveFile={removeFile}
+            currentIndex={currentCarouselIndex}
+          />
+        </div>
       )}
     </div>
   );

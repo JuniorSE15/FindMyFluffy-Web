@@ -10,7 +10,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { FormPostFoundSchema } from '@/schemas/post.schema';
+import { FormPostLostSchema } from '@/schemas/post.schema';
 import {
   Select,
   SelectContent,
@@ -21,6 +21,9 @@ import {
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import UploadPicture from './upload-picture';
+import 'leaflet/dist/leaflet.css';
+import { Button } from '@/components/ui/button';
+import { CalendarIcon } from 'lucide-react';
 
 import dynamic from 'next/dynamic';
 
@@ -28,13 +31,11 @@ const MapPicker = dynamic(() => import('./map-picker'), {
   ssr: false,
 });
 
-interface FoundPetDetailsFormProps {
-  form: UseFormReturn<z.infer<typeof FormPostFoundSchema>>;
+interface LostPetDetailsFormProps {
+  form: UseFormReturn<z.infer<typeof FormPostLostSchema>>;
 }
 
-export default function FoundPetDetailsForm({
-  form,
-}: FoundPetDetailsFormProps) {
+export default function LostPetDetailsForm({ form }: LostPetDetailsFormProps) {
   const handleImagesChange = (files: File[]) => {
     form.setValue('images', files);
   };
@@ -57,7 +58,7 @@ export default function FoundPetDetailsForm({
                   <Input
                     type='text'
                     className='bg-accent rounded-xl'
-                    placeholder='e.g., Found Golden Retriever near Central Park'
+                    placeholder='e.g., Lost Golden Retriever in Central Park'
                     {...field}
                   />
                 </FormControl>
@@ -99,6 +100,24 @@ export default function FoundPetDetailsForm({
           Pet Details
         </h1>
         <div className='mt-2 flex w-full flex-col gap-4'>
+          <FormField
+            control={form.control}
+            name='petName'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Pet Name</FormLabel>
+                <FormControl>
+                  <Input
+                    type='text'
+                    className='bg-accent rounded-xl'
+                    placeholder='e.g., Buddy'
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           <FormField
             control={form.control}
             name='petType'
@@ -144,6 +163,30 @@ export default function FoundPetDetailsForm({
           />
           <FormField
             control={form.control}
+            name='age'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Age</FormLabel>
+                <FormControl>
+                  <Input
+                    type='number'
+                    className='bg-accent rounded-xl'
+                    placeholder='e.g., 3'
+                    min='1'
+                    {...field}
+                    onChange={(e) =>
+                      field.onChange(
+                        e.target.value ? parseInt(e.target.value) : '',
+                      )
+                    }
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
             name='gender'
             render={({ field }) => (
               <FormItem>
@@ -162,6 +205,24 @@ export default function FoundPetDetailsForm({
                       <SelectItem value='Unknown'>Unknown</SelectItem>
                     </SelectContent>
                   </Select>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name='microchip'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Microchip ID (Optional)</FormLabel>
+                <FormControl>
+                  <Input
+                    type='text'
+                    className='bg-accent rounded-xl'
+                    placeholder='e.g., 123456789012345'
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -188,7 +249,6 @@ export default function FoundPetDetailsForm({
         </div>
       </Card>
 
-      {/* Location and Time Section (Might separate this into another component) */}
       <Card className='mt-6 flex w-full flex-col gap-2 p-4'>
         <h1 className='text-primary-text text-left text-2xl leading-10 font-bold'>
           Time and Location
@@ -214,7 +274,7 @@ export default function FoundPetDetailsForm({
                     }}
                   />
                 </FormControl>
-                <div className='h-64 w-full overflow-hidden rounded-xl'>
+                <div className='relative z-10 h-64 w-full overflow-hidden rounded-xl'>
                   <MapPicker
                     address={field.value}
                     onAddressChange={(address) =>
@@ -233,10 +293,10 @@ export default function FoundPetDetailsForm({
           <div className='grid grid-cols-2 gap-4'>
             <FormField
               control={form.control}
-              name='dateFound'
+              name='dateLost'
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Date Found</FormLabel>
+                  <FormLabel>Date Lost</FormLabel>
                   <FormControl>
                     <Input
                       type='date'
@@ -252,10 +312,10 @@ export default function FoundPetDetailsForm({
             />
             <FormField
               control={form.control}
-              name='timeFound'
+              name='timeLost'
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Time Found</FormLabel>
+                  <FormLabel>Time Lost</FormLabel>
                   <FormControl>
                     <Input
                       type='time'

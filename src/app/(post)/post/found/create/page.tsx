@@ -14,15 +14,16 @@ export default function FoundReportPage() {
   const form = useForm<z.infer<typeof FormPostFoundSchema>>({
     resolver: zodResolver(FormPostFoundSchema),
     defaultValues: {
-      Breed: '',
-      Gender: 'Unknown',
-      PetType: '',
-      Images: [],
-      Description: '',
-      LastSeenLocation: '',
-      DateLost: '',
-      TimeLost: '',
-      SocialMediaLink: '',
+      title: '',
+      breed: '',
+      gender: 'Unknown',
+      petType: '',
+      images: [],
+      description: '',
+      lastSeenLocation: '',
+      dateFound: '',
+      timeFound: '',
+      socialMediaLink: '',
     },
   });
   const router = useRouter();
