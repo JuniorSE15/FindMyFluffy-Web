@@ -17,8 +17,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
 import { EyeIcon, EyeOffIcon, Loader2Icon } from 'lucide-react';
 import { SignInSchema } from '@/schemas/auth.schema';
+import { useAuth } from '@/hooks/useAuth';
 
 export function SignInForm() {
+  const { loginMutation, isLoginPending } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
 
   const form = useForm<z.infer<typeof SignInSchema>>({
@@ -29,8 +31,12 @@ export function SignInForm() {
     },
   });
 
-  const onSubmit = (data: z.infer<typeof SignInSchema>) => {
-    console.log(data);
+  const onSubmit = async (data: z.infer<typeof SignInSchema>) => {
+    try {
+      await loginMutation(data);
+    } catch (error) {
+      console.error('Login failed: ', error);
+    }
   };
 
   return (
@@ -98,11 +104,11 @@ export function SignInForm() {
           <Button
             type='submit'
             variant='default'
-            className='bg-secondary-bg text-primary-foreground w-52 cursor-pointer rounded-full border-2 py-6 text-base font-medium transition-all duration-300 ease-in-out'
+            className='bg-interface-secondary text-primary-foreground w-52 cursor-pointer rounded-full border-2 py-6 text-base font-medium transition-all duration-300 ease-in-out'
             size='lg'
-            disabled={form.formState.isSubmitting}
+            disabled={form.formState.isSubmitting || isLoginPending}
           >
-            {form.formState.isSubmitting ? (
+            {form.formState.isSubmitting || isLoginPending ? (
               <>
                 <Loader2Icon size={24} className='animate-spin' />
                 <span>Signing in...</span>

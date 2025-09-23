@@ -10,14 +10,14 @@ const BUTTOM_NAVBAR_ITEMS = [
   {
     label: 'Home',
     icon: <HomeIcon className='text-secondary-text' />,
-    activeIcon: <HomeIcon className='text-secondary-bg' />,
+    activeIcon: <HomeIcon className='text-interface-secondary' />,
     href: '/',
   },
   {
-    label: 'Maps',
+    label: 'Map',
     icon: <MapIcon className='text-secondary-text' />,
     activeIcon: <MapIcon className='text-secondary-bg' />,
-    href: '/maps',
+    href: '/map',
   },
   {
     label: 'New',
@@ -28,13 +28,13 @@ const BUTTOM_NAVBAR_ITEMS = [
   {
     label: 'Notifications',
     icon: <BellIcon className='text-secondary-text' />,
-    activeIcon: <BellIcon className='text-secondary-bg' />,
+    activeIcon: <BellIcon className='text-interface-secondary' />,
     href: '/notifications',
   },
   {
     label: 'Account',
     icon: <UserIcon className='text-secondary-text' />,
-    activeIcon: <UserIcon className='text-secondary-bg' />,
+    activeIcon: <UserIcon className='text-interface-secondary' />,
     href: '/account',
   },
 ];
@@ -69,7 +69,7 @@ export const BottomNavigationBar = () => {
             item.href === '/new' ? (
               <div
                 key={item.href}
-                className='text-secondary-text hover:text-secondary-bg flex w-16 flex-col items-center justify-center gap-2'
+                className='text-secondary-text hover:text-interface-secondary flex w-16 flex-col items-center justify-center gap-2'
                 onClick={() => setIsOpen(!isOpen)}
               >
                 {item.activeIcon}
@@ -113,7 +113,7 @@ const BottomNavigationBarItem = ({
     >
       {pathname === href ? activeIcon : icon}
       <span
-        className={`text-[10px] font-bold ${pathname === href ? 'text-secondary-bg' : 'text-secondary-text'}`}
+        className={`text-[10px] font-bold ${pathname === href ? 'text-interface-secondary' : 'text-secondary-text'}`}
       >
         {label}
       </span>
