@@ -17,7 +17,7 @@ export function LostPostView({ post, lost }: LostPostViewProps) {
   return (
     <div className='min-h-screen bg-[#F8F7F4]'>
       <div className='mx-auto max-w-md'>
-        <LostHeader post={post} />
+        <LostHeader post={post} lost={lost} />
         <LostDetail post={post} lost={lost} />
         <LostDescription post={post} />
         <LostCharacteristics post={post} />

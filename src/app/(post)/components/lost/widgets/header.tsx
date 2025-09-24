@@ -1,11 +1,12 @@
 import Image from 'next/image';
 import { AlertCircle, Share } from 'lucide-react';
-import { type Post } from '@/types/post';
+import { type LostPost, type Post } from '@/types/post';
 
-type Props = { post: Post };
+type Props = { post: Post; lost?: LostPost };
 
-export function LostHeader({ post }: Props) {
-  const title = 'Help me find my cat!';
+export function LostHeader({ post, lost }: Props) {
+  const petName = lost?.name ?? 'my pet';
+  const title = `Help me find ${petName}`;
   const tag = 'Lost';
   return (
     <div className='bg-white'>

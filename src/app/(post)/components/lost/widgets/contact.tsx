@@ -1,20 +1,30 @@
+import { UserCircle, Phone, Mail } from 'lucide-react';
+
 export function LostContact() {
   return (
     <div className='bg-white px-4 py-4'>
+      {/* Title */}
       <div className='mb-3 text-sm font-medium text-gray-900'>
-        Contact information
+        Contact Information
       </div>
-      <div className='space-y-2 text-sm'>
-        <div className='flex items-center justify-between rounded-md border border-gray-200 p-3'>
-          <span className='text-gray-600'>Natsuki Subaru</span>
+
+      {/* Contact details */}
+      <div className='space-y-3 text-sm text-gray-600'>
+        <div className='flex items-center space-x-2'>
+          <UserCircle className='h-5 w-5 text-gray-400' />
+          <span>Natsuki Subaru</span>
         </div>
-        <div className='flex items-center justify-between rounded-md border border-gray-200 p-3'>
-          <span className='text-gray-600'>988-888-8888</span>
+        <div className='flex items-center space-x-2'>
+          <Phone className='h-5 w-5 text-gray-400' />
+          <span>088-888-8888</span>
         </div>
-        <div className='flex items-center justify-between rounded-md border border-gray-200 p-3'>
-          <span className='text-gray-600'>example@email.com</span>
+        <div className='flex items-center space-x-2'>
+          <Mail className='h-5 w-5 text-gray-400' />
+          <span>emt@xxx.com</span>
         </div>
       </div>
+
+      {/* Divider */}
       <div className='mt-4 h-px w-full bg-gray-200' />
     </div>
   );
