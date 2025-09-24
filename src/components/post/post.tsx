@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import { AlertCircle, Share } from 'lucide-react';
 import { type Post as PostType } from '@/types/post';
 import { MOCK_LOST_POSTS } from '@/constants/post';
@@ -17,6 +18,7 @@ export function Post({
 
   const title = is_lost ? `${petName}!` : `${petName}`;
   const tag = is_lost ? `Lost ${type}` : `Found ${type}`;
+  const href = is_lost ? `/post/lost/${id}` : `/post/found/${id}`;
 
   return (
     <div className='bg-white'>
@@ -26,7 +28,11 @@ export function Post({
       </div>
 
       {/* Title */}
-      <h2 className='mb-2 text-lg font-bold text-gray-900'>{title}</h2>
+      <h2 className='mb-2 text-lg font-bold text-gray-900'>
+        <Link href={href} className='hover:underline'>
+          {title}
+        </Link>
+      </h2>
 
       {/* Tags */}
       <div className='mb-4 flex items-center gap-2'>
@@ -42,9 +48,11 @@ export function Post({
 
       {/* Image */}
       <div className='mb-4'>
-        <div className='relative h-64 w-full overflow-hidden rounded-lg bg-gray-200'>
-          <Image src={image} alt={title} fill className='object-cover' />
-        </div>
+        <Link href={href} className='block'>
+          <div className='relative h-64 w-full overflow-hidden rounded-lg bg-gray-200'>
+            <Image src={image} alt={title} fill className='object-cover' />
+          </div>
+        </Link>
       </div>
 
       {/* Actions */}
