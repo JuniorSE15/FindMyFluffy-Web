@@ -1,9 +1,9 @@
-import { type Post } from '@/types/post';
-import { PawPrint, BadgePercent, Hourglass, Venus } from 'lucide-react';
+import { type LostPost, type Post } from '@/types/post';
+import { PawPrint, BadgePercent, Hourglass, Venus, Cpu } from 'lucide-react';
 
-type Props = { post: Post };
+type Props = { post: Post; lost?: LostPost };
 
-export function LostCharacteristics({ post }: Props) {
+export function LostCharacteristics({ post, lost }: Props) {
   return (
     <div className='bg-white px-4 py-4'>
       <div className='mb-3 text-sm font-medium text-gray-900'>
@@ -53,6 +53,19 @@ export function LostCharacteristics({ post }: Props) {
       </div>
 
       <div className='mt-4 h-px w-full bg-gray-200' />
+
+      {/* Row 3 */}
+      <div className='mt-4 grid grid-cols-2 gap-6 text-sm'>
+        <div>
+          <div className='mb-1 flex items-center gap-2 text-gray-600'>
+            <Cpu className='h-4 w-4 text-orange-500' />
+            <span>Microchip ID</span>
+          </div>
+          <div className='font-semibold text-gray-900'>
+            {lost?.microchip ?? '—'}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

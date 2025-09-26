@@ -8,16 +8,15 @@ import {
   ChevronLeft,
   ChevronRight,
 } from 'lucide-react';
-import { type LostPost, type Post } from '@/types/post';
+import { type Post } from '@/types/post';
 import { useState } from 'react';
 
-type Props = { post: Post; lost?: LostPost };
+type Props = { post: Post };
 
-export function LostHeader({ post, lost }: Props) {
+export function FoundHeader({ post }: Props) {
   const router = useRouter();
-  const petName = lost?.name ?? 'my pet';
-  const title = `Help me find ${petName}`;
-  const tag = 'Lost';
+  const title = `I found this pet`;
+  const tag = 'Found';
   const images =
     post.images && post.images.length > 0 ? post.images : [post.image];
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -40,18 +39,17 @@ export function LostHeader({ post, lost }: Props) {
         >
           <ArrowLeft className='h-5 w-5' />
         </button>
-        {/* (Removed time from here) */}
       </div>
 
       {/* Title & time on same row */}
       <div className='flex items-center justify-between px-4 pb-1'>
         <h1 className='text-xl font-semibold text-gray-900'>{title}</h1>
-        <span className='text-sm text-gray-500'>15 hours ago</span>
+        <span className='text-sm text-gray-500'>{post.timeAgo ?? ''}</span>
       </div>
 
       {/* Tag */}
       <div className='px-4 pb-3'>
-        <span className='inline-block rounded-full bg-orange-500 px-3 py-1 text-sm font-medium text-white'>
+        <span className='inline-block rounded-full bg-green-600 px-3 py-1 text-sm font-medium text-white'>
           {tag}
         </span>
       </div>

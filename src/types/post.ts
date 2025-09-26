@@ -6,6 +6,7 @@ export type Post = {
   gender: 'male' | 'female' | 'unknown';
   description: string;
   image: string;
+  images?: string[];
   online_post?: string;
   is_lost: boolean;
   timeAgo?: string;
