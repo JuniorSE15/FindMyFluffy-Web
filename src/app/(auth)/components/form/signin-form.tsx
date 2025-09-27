@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import {
@@ -43,6 +42,7 @@ export function SignInForm() {
     <Form {...form}>
       <form className='w-full space-y-6' onSubmit={form.handleSubmit(onSubmit)}>
         <FormField
+          control={form.control}
           name='email'
           render={({ field }) => (
             <FormItem>
@@ -61,6 +61,7 @@ export function SignInForm() {
           )}
         />
         <FormField
+          control={form.control}
           name='password'
           render={({ field }) => (
             <FormItem>
@@ -94,11 +95,9 @@ export function SignInForm() {
           )}
         />
         <div className='flex items-center justify-end gap-2'>
-          <Link href='/#'>
-            <Button variant='link' className='pr-0'>
-              Forgot password?
-            </Button>
-          </Link>
+          <Button variant='link' className='pr-0' type='button'>
+            Forgot password?
+          </Button>
         </div>
         <div className='mt-6 flex justify-center'>
           <Button
