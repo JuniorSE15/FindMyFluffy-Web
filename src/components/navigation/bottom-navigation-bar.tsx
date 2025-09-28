@@ -26,10 +26,10 @@ const BUTTOM_NAVBAR_ITEMS = [
     href: '/new',
   },
   {
-    label: 'Notifications',
+    label: 'Notification',
     icon: <BellIcon className='text-secondary-text' />,
     activeIcon: <BellIcon className='text-interface-secondary' />,
-    href: '/notifications',
+    href: '/notification',
   },
   {
     label: 'Account',
