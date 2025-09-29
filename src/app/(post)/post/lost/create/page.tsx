@@ -50,20 +50,26 @@ export default function LostReportPage() {
   };
 
   return (
-    <div className='relative mx-auto flex h-full min-h-screen w-full max-w-xl flex-col justify-start rounded-lg px-2 py-6 shadow-2xl md:px-10'>
+    <div className='relative mx-auto flex h-screen w-full max-w-xl flex-col rounded-lg shadow-2xl'>
       <TopBarPostForm
         onPost={() => form.handleSubmit(onSubmit)()}
         onClose={() => router.back()}
         isLoading={isSubmitting}
       />
-      <h1 className='text-primary-text text-left text-2xl leading-10 font-bold'>
-        Report a Lost pet
-      </h1>
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-0'>
-          <LostPetDetailsForm form={form} />
-        </form>
-      </Form>
+      <div className='flex-1 overflow-y-auto'>
+        <div className='px-2 py-6 md:px-10'>
+          <h1 className='text-primary-text text-left text-2xl leading-10 font-bold'>
+            Report a Lost pet
+          </h1>
+        </div>
+        <div className='px-2 pb-6 md:px-10'>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-0'>
+              <LostPetDetailsForm form={form} />
+            </form>
+          </Form>
+        </div>
+      </div>
     </div>
   );
 }
