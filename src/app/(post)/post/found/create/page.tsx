@@ -8,9 +8,13 @@ import { useRouter } from 'next/navigation';
 import { z } from 'zod';
 import { Form } from '@/components/ui/form';
 import { useState } from 'react';
+import { submitFoundPetPostAction } from '@/services/post.service';
+import { useAuth } from '@/hooks/useAuth';
+import { toast } from 'sonner';
 
 export default function FoundReportPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { session } = useAuth();
   const form = useForm<z.infer<typeof FormPostFoundSchema>>({
     resolver: zodResolver(FormPostFoundSchema),
     defaultValues: {
@@ -29,17 +33,33 @@ export default function FoundReportPage() {
   const router = useRouter();
 
   const onSubmit = async (data: z.infer<typeof FormPostFoundSchema>) => {
+    if (!session?.userId) {
+      toast.error('You must be logged in to submit a report');
+      return;
+    }
+
     try {
       setIsSubmitting(true);
       console.log('Form submitted:', data);
 
-      // api call here
+      const result = await submitFoundPetPostAction(data, session.userId);
 
-      alert('Found pet report submitted successfully!');
-      router.push('/');
+      if (result) {
+        toast.success('Found pet report submitted successfully!', {
+          description:
+            'Your report has been posted and is now visible to others.',
+        });
+        router.push('/');
+      }
     } catch (error) {
       console.error('Submission error:', error);
-      alert('Failed to submit report. Please try again.');
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : 'Failed to submit report. Please try again.';
+      toast.error('Submission failed', {
+        description: errorMessage,
+      });
     } finally {
       setIsSubmitting(false);
     }

@@ -20,3 +20,37 @@ export type LostPost = {
   microchip?: string;
   returned: boolean;
 };
+
+export type FoundPetPostResponse = {
+  id: string;
+  postId: string;
+  catched: boolean;
+  userId: string;
+  title: string;
+  type: string;
+  breed?: string;
+  gender: number;
+  description?: string;
+  image?: string;
+  onlinePost?: string;
+  isLost: boolean;
+  latitude: number;
+  longitude: number;
+  postDatetime: string;
+};
+
+export type FoundPetPostFormData = {
+  catched: boolean;
+  userId: string;
+  title: string;
+  type: string;
+  breed?: string;
+  gender: number;
+  description?: string;
+  onlinePost?: string;
+  isLost: boolean;
+  latitude?: number;
+  longitude?: number;
+  postDatetime: string;
+  images?: File[];
+};

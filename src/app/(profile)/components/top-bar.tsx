@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 
-export const TopNavigationBar = () => {
+export const TopNavigationBarProfile = () => {
   return (
     <nav className='relative flex h-16 w-full max-w-xl items-center bg-white px-6 pt-2 shadow-md'>
       <div className='absolute left-6 flex cursor-pointer items-center'>
