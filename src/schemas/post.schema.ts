@@ -5,7 +5,7 @@ export const FormPostLostSchema = z.object({
   petName: z.string().min(1, { message: 'Pet name is required' }),
   petType: z.string().min(1, { message: 'Pet type is required' }),
   breed: z.string().optional(),
-  age: z.transform(Number).pipe(z.number().min(1, 'Pet Age is required')),
+  age: z.number().min(1, 'Pet age must be at least 1 year').optional(),
   gender: z.enum(['Male', 'Female', 'Unknown'], {
     message: 'Gender is required',
   }),
@@ -20,6 +20,7 @@ export const FormPostLostSchema = z.object({
   lastSeenLng: z.number().optional(),
   timeLost: z.string().min(1, { message: 'Time lost is required' }),
   socialMediaLink: z.string().optional(),
+  bounty: z.number().min(0, 'Bounty must be a positive number').optional(),
 });
 
 export const FormPostFoundSchema = z.object({

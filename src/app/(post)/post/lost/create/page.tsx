@@ -8,16 +8,20 @@ import { FormPostLostSchema } from '@/schemas/post.schema';
 import { useRouter } from 'next/navigation';
 import { z } from 'zod';
 import { Form } from '@/components/ui/form';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { submitLostPetPostAction } from '@/services/post.service';
+import { getSessionAction } from '@/services/auth.service';
+import { toast } from 'sonner';
 
 export default function LostReportPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [userId, setUserId] = useState<string | null>(null);
   const form = useForm<z.infer<typeof FormPostLostSchema>>({
     resolver: zodResolver(FormPostLostSchema),
     defaultValues: {
       title: '',
       petName: '',
-      age: 0,
+      age: undefined,
       breed: '',
       gender: 'Unknown',
       petType: '',
@@ -28,22 +32,72 @@ export default function LostReportPage() {
       dateLost: '',
       timeLost: '',
       socialMediaLink: '',
+      bounty: undefined,
     },
   });
   const router = useRouter();
 
+  useEffect(() => {
+    const getUserSession = async () => {
+      try {
+        const session = await getSessionAction();
+        if (session?.userId) {
+          setUserId(session.userId);
+        }
+      } catch (error) {
+        console.error('Failed to get user session:', error);
+        // Redirect to login if not authenticated
+        router.push('/signin');
+      }
+    };
+
+    getUserSession();
+  }, [router]);
+
   const onSubmit = async (data: z.infer<typeof FormPostLostSchema>) => {
+    if (!userId) {
+      toast.error('You must be logged in to submit a report');
+      router.push('/signin');
+      return;
+    }
+
     try {
       setIsSubmitting(true);
       console.log('Form submitted:', data);
 
-      // api call here
+      const result = await submitLostPetPostAction(data, userId);
 
-      alert('Lost pet report submitted successfully!');
-      router.push('/');
+      if (result) {
+        toast.success('Lost pet report submitted successfully!');
+        router.push('/');
+      } else {
+        throw new Error('No response data received from server');
+      }
     } catch (error) {
       console.error('Submission error:', error);
-      alert('Failed to submit report. Please try again.');
+      let errorMessage = 'Failed to submit report. Please try again.';
+
+      if (error instanceof Error) {
+        if (error.message.includes('Validation errors:')) {
+          errorMessage = error.message;
+        } else if (
+          error.message.includes('401') ||
+          error.message.includes('Unauthorized')
+        ) {
+          errorMessage = 'Your session has expired. Please log in again.';
+          router.push('/signin');
+          return;
+        } else if (error.message.includes('400')) {
+          errorMessage =
+            'Invalid data submitted. Please check your inputs and try again.';
+        } else if (error.message.includes('500')) {
+          errorMessage = 'Server error occurred. Please try again later.';
+        } else {
+          errorMessage = error.message;
+        }
+      }
+
+      alert(errorMessage);
     } finally {
       setIsSubmitting(false);
     }

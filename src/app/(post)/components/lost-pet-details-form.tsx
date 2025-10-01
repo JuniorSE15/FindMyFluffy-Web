@@ -172,9 +172,10 @@ export default function LostPetDetailsForm({ form }: LostPetDetailsFormProps) {
                     placeholder='e.g., 3'
                     min='1'
                     {...field}
+                    value={field.value ?? ''}
                     onChange={(e) =>
                       field.onChange(
-                        e.target.value ? parseInt(e.target.value) : '',
+                        e.target.value ? parseInt(e.target.value) : undefined,
                       )
                     }
                   />
@@ -339,6 +340,36 @@ export default function LostPetDetailsForm({ form }: LostPetDetailsFormProps) {
                     placeholder='https://facebook.com/post/123'
                     {...field}
                   />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name='bounty'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Bounty (Optional)</FormLabel>
+                <FormControl>
+                  <div className='relative'>
+                    <Input
+                      type='number'
+                      className='bg-accent rounded-xl pr-8'
+                      placeholder='e.g., 50'
+                      min='0'
+                      {...field}
+                      value={field.value ?? ''}
+                      onChange={(e) =>
+                        field.onChange(
+                          e.target.value ? parseInt(e.target.value) : undefined,
+                        )
+                      }
+                    />
+                    <span className='absolute top-1/2 right-3 -translate-y-1/2 text-gray-500'>
+                      ฿
+                    </span>
+                  </div>
                 </FormControl>
                 <FormMessage />
               </FormItem>

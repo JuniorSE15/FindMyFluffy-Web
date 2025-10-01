@@ -7,14 +7,14 @@ import { FormPostFoundSchema } from '@/schemas/post.schema';
 import { useRouter } from 'next/navigation';
 import { z } from 'zod';
 import { Form } from '@/components/ui/form';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { submitFoundPetPostAction } from '@/services/post.service';
-import { useAuth } from '@/hooks/useAuth';
 import { toast } from 'sonner';
+import { getSessionAction } from '@/services/auth.service';
 
 export default function FoundReportPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { session } = useAuth();
+  const [userId, setUserId] = useState<string | null>(null);
   const form = useForm<z.infer<typeof FormPostFoundSchema>>({
     resolver: zodResolver(FormPostFoundSchema),
     defaultValues: {
@@ -32,9 +32,27 @@ export default function FoundReportPage() {
   });
   const router = useRouter();
 
+  useEffect(() => {
+    const getUserSession = async () => {
+      try {
+        const session = await getSessionAction();
+        if (session?.userId) {
+          setUserId(session.userId);
+        }
+      } catch (error) {
+        console.error('Failed to get user session:', error);
+        // Redirect to login if not authenticated
+        router.push('/signin');
+      }
+    };
+
+    getUserSession();
+  }, [router]);
+
   const onSubmit = async (data: z.infer<typeof FormPostFoundSchema>) => {
-    if (!session?.userId) {
+    if (!userId) {
       toast.error('You must be logged in to submit a report');
+      router.push('/signin');
       return;
     }
 
@@ -42,24 +60,39 @@ export default function FoundReportPage() {
       setIsSubmitting(true);
       console.log('Form submitted:', data);
 
-      const result = await submitFoundPetPostAction(data, session.userId);
+      const result = await submitFoundPetPostAction(data, userId);
 
       if (result) {
-        toast.success('Found pet report submitted successfully!', {
-          description:
-            'Your report has been posted and is now visible to others.',
-        });
+        toast.success('Found pet report submitted successfully!');
         router.push('/');
+      } else {
+        throw new Error('Failed to submit found pet report. Please try again.');
       }
     } catch (error) {
       console.error('Submission error:', error);
-      const errorMessage =
-        error instanceof Error
-          ? error.message
-          : 'Failed to submit report. Please try again.';
-      toast.error('Submission failed', {
-        description: errorMessage,
-      });
+      let errorMessage = 'Failed to submit report. Please try again.';
+
+      if (error instanceof Error) {
+        if (error.message.includes('Validation errors:')) {
+          errorMessage = error.message;
+        } else if (
+          error.message.includes('401') ||
+          error.message.includes('Unauthorized')
+        ) {
+          errorMessage = 'Your session has expired. Please log in again.';
+          router.push('/signin');
+          return;
+        } else if (error.message.includes('400')) {
+          errorMessage =
+            'Invalid data submitted. Please check your inputs and try again.';
+        } else if (error.message.includes('500')) {
+          errorMessage = 'Server error occurred. Please try again later.';
+        } else {
+          errorMessage = error.message;
+        }
+      }
+
+      alert(errorMessage);
     } finally {
       setIsSubmitting(false);
     }

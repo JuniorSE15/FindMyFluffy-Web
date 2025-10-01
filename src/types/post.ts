@@ -54,3 +54,42 @@ export type FoundPetPostFormData = {
   postDatetime: string;
   images?: File[];
 };
+
+export type LostPetPostResponse = {
+  id: string;
+  postId: string;
+  userId: string;
+  title: string;
+  name: string;
+  type: string;
+  breed?: string;
+  age?: number;
+  gender: number;
+  microchip?: string;
+  description?: string;
+  onlinePost?: string;
+  isLost: boolean;
+  bounty?: number;
+  latitude: number;
+  longitude: number;
+  postDatetime: string;
+};
+
+export type LostPetPostFormData = {
+  userId: string;
+  title: string;
+  name: string;
+  type: string;
+  breed?: string;
+  age?: number;
+  gender: number;
+  microchip?: string;
+  description?: string;
+  onlinePost?: string;
+  isLost: boolean;
+  bounty?: number;
+  latitude?: number;
+  longitude?: number;
+  postDatetime: string;
+  images?: File[];
+};

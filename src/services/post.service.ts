@@ -1,9 +1,14 @@
 'use server';
 
 import { z } from 'zod';
-import { FormPostFoundSchema } from '@/schemas/post.schema';
+import { FormPostFoundSchema, FormPostLostSchema } from '@/schemas/post.schema';
 import { baseApiAction } from './api.service';
-import { FoundPetPostFormData, FoundPetPostResponse } from '@/types/post';
+import {
+  FoundPetPostFormData,
+  FoundPetPostResponse,
+  LostPetPostFormData,
+  LostPetPostResponse,
+} from '@/types/post';
 
 export type ApiResponse<T> = {
   data?: T;
@@ -44,6 +49,37 @@ export async function transformFoundPetFormToApi(
     description: formData.description || '',
     onlinePost: formData.socialMediaLink || '',
     isLost: false,
+    latitude: formData.lastSeenLat || 0,
+    longitude: formData.lastSeenLng || 0,
+    postDatetime: postDatetime,
+    images: formData.images || [],
+  };
+}
+
+// Transform lost pet form data to API request format
+export async function transformLostPetFormToApi(
+  formData: z.infer<typeof FormPostLostSchema>,
+  userId: string,
+): Promise<LostPetPostFormData> {
+  // Combine date and time into ISO datetime string
+  const postDatetime =
+    formData.dateLost && formData.timeLost
+      ? new Date(`${formData.dateLost}T${formData.timeLost}`).toISOString()
+      : new Date().toISOString();
+
+  return {
+    userId: userId,
+    title: formData.title,
+    name: formData.petName,
+    type: formData.petType.toLowerCase(),
+    breed: formData.breed || '',
+    age: formData.age,
+    gender: GENDER_MAP[formData.gender] ?? 1000,
+    microchip: formData.microchip || '',
+    description: formData.description || '',
+    onlinePost: formData.socialMediaLink || '',
+    isLost: true,
+    bounty: formData.bounty,
     latitude: formData.lastSeenLat || 0,
     longitude: formData.lastSeenLng || 0,
     postDatetime: postDatetime,
@@ -107,6 +143,61 @@ export async function submitFoundPetPost(
   });
 }
 
+// Submit lost pet post to the API
+export async function submitLostPetPost(
+  data: LostPetPostFormData,
+): Promise<ApiResponse<LostPetPostResponse>> {
+  // Create FormData for multipart/form-data submission
+  const formData = new FormData();
+
+  // Add all the fields to FormData
+  formData.append('UserId', data.userId);
+  formData.append('Title', data.title);
+  formData.append('Name', data.name);
+  formData.append('Type', data.type);
+  formData.append('Gender', data.gender.toString());
+  formData.append('IsLost', data.isLost ? 'true' : 'false');
+  formData.append('PostDatetime', data.postDatetime);
+
+  if (data.breed) {
+    formData.append('Breed', data.breed);
+  }
+  if (data.age !== undefined) {
+    formData.append('Age', data.age.toString());
+  }
+  if (data.microchip) {
+    formData.append('Microchip', data.microchip);
+  }
+  if (data.description) {
+    formData.append('Description', data.description);
+  }
+  if (data.onlinePost) {
+    formData.append('OnlinePost', data.onlinePost);
+  }
+  if (data.bounty !== undefined) {
+    formData.append('Bounty', data.bounty.toString());
+  }
+  if (data.latitude !== undefined) {
+    formData.append('Latitude', data.latitude.toString());
+  }
+  if (data.longitude !== undefined) {
+    formData.append('Longitude', data.longitude.toString());
+  }
+
+  // Append each image file to FormData
+  if (data.images && data.images.length > 0) {
+    data.images.forEach((file, index) => {
+      formData.append('images', file, file.name);
+    });
+  }
+
+  return baseApiAction<LostPetPostResponse>('/api/posts/lost', {
+    method: 'POST',
+    body: formData,
+    requiresAuth: true,
+  });
+}
+
 export async function submitFoundPetPostAction(
   formData: z.infer<typeof FormPostFoundSchema>,
   userId: string,
@@ -135,6 +226,38 @@ export async function submitFoundPetPostAction(
     return response.data;
   } catch (error) {
     console.error('Error submitting found pet post:', error);
+    throw error;
+  }
+}
+
+export async function submitLostPetPostAction(
+  formData: z.infer<typeof FormPostLostSchema>,
+  userId: string,
+) {
+  try {
+    const apiData = await transformLostPetFormToApi(formData, userId);
+
+    // console.log('Transformed API data:', {
+    //   ...apiData,
+    //   images: apiData.images?.length || 0,
+    // });
+
+    const response = await submitLostPetPost(apiData);
+
+    if (response.error) {
+      let errorMessage =
+        response.error.message || 'Failed to submit lost pet post';
+
+      if (response.error.detail) {
+        errorMessage += '\n\nValidation errors:\n' + response.error.detail;
+      }
+
+      throw new Error(errorMessage);
+    }
+
+    return response.data;
+  } catch (error) {
+    console.error('Error submitting lost pet post:', error);
     throw error;
   }
 }
