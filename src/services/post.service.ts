@@ -177,3 +177,26 @@ export async function submitLostPetPostAction(
     throw error;
   }
 }
+
+export async function getPostsAction(isLost: boolean) {
+  try {
+    const queryParams = new URLSearchParams();
+    queryParams.set('isLost', isLost.toString());
+
+    const response = await baseApiAction<
+      LostPetPostResponse[] | FoundPetPostResponse[]
+    >(`/api/posts?${queryParams}`, {
+      method: 'GET',
+      requiresAuth: true,
+    });
+
+    if (response.error) {
+      throw new Error(response.error.message);
+    }
+
+    return response.data;
+  } catch (error) {
+    console.error('Error getting posts:', error);
+    throw error;
+  }
+}

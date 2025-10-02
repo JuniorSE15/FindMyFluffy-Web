@@ -37,6 +37,7 @@ export type FoundPetPostResponse = {
   latitude: number;
   longitude: number;
   postDatetime: string;
+  name: string;
 };
 
 export type FoundPetPostFormData = {
@@ -73,6 +74,7 @@ export type LostPetPostResponse = {
   latitude: number;
   longitude: number;
   postDatetime: string;
+  returned: boolean;
 };
 
 export type LostPetPostFormData = {
@@ -92,4 +94,10 @@ export type LostPetPostFormData = {
   longitude: number;
   postDatetime: string;
   images?: File[];
+};
+
+export type PostQueryParams = {
+  isLost?: boolean;
+  limit?: number;
+  userId?: string;
 };

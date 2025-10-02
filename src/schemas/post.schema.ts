@@ -11,7 +11,7 @@ export const FormPostLostSchema = z.object({
   }),
   images: z.array(z.instanceof(File)).optional(),
   microchip: z.string().optional(),
-  description: z.string().optional(),
+  description: z.string().min(1, { message: 'Description is required' }),
   lastSeenLocation: z
     .string()
     .min(1, { message: 'Last seen location is required' }),
@@ -31,7 +31,7 @@ export const FormPostFoundSchema = z.object({
     message: 'Gender is required',
   }),
   images: z.array(z.instanceof(File)).optional(),
-  description: z.string().optional(),
+  description: z.string().min(1, { message: 'Description is required' }),
   lastSeenLocation: z
     .string()
     .min(1, { message: 'Last seen location is required' }),

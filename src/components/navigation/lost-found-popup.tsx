@@ -39,7 +39,7 @@ const LostFoundItem = ({
 }) => {
   return (
     <motion.a
-      href='#'
+      href={type === 'lost' ? '/post/lost/create' : '/post/found/create'}
       key={type}
       className='bg-interface-primary flex h-20 w-20 cursor-pointer flex-col items-center justify-center gap-1 rounded-full p-4'
       initial={{ opacity: 0, scale: 0 }}

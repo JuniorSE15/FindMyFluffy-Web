@@ -1,4 +1,4 @@
-import { SearchDialog } from '@/components/search/search-diaglog';
+import { SearchDialog } from '@/components/search/search-dialog';
 import {
   Select,
   SelectTrigger,

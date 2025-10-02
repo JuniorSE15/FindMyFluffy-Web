@@ -4,14 +4,19 @@ import { useState } from 'react';
 import { BottomNavigationBar } from '@/components/navigation/bottom-navigation-bar';
 import { TopNavigationBar } from '@/components/navigation/top-navigation-bar';
 import { Post } from '@/components/post/post';
-import { MOCK_FEED_POSTS } from '@/constants/post';
+import { useFoundPosts, useLostPosts } from '@/hooks/usePost';
+import { Loader2Icon } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<'lost' | 'found'>('lost');
 
-  const posts = MOCK_FEED_POSTS.filter((p) =>
-    activeTab === 'lost' ? p.is_lost : !p.is_lost,
-  );
+  const { posts: lostPosts, isLoading: lostPostsLoading } = useLostPosts({
+    isLost: activeTab === 'lost',
+  });
+  const { posts: foundPosts, isLoading: foundPostsLoading } = useFoundPosts({
+    isLost: activeTab === 'found',
+  });
 
   return (
     <div className='relative flex h-screen flex-col'>
@@ -20,9 +25,27 @@ export default function Home() {
       </div>
       <main className='flex-1 overflow-hidden'>
         <div className='h-full space-y-4 overflow-y-auto scroll-smooth p-4'>
-          {posts.map((post) => (
-            <Post key={post.id} {...post} />
-          ))}
+          {lostPostsLoading || foundPostsLoading ? (
+            <div className='flex h-full w-full items-center justify-center gap-2'>
+              <Loader2Icon className='animate-spin' />
+              <div className='text-center'>Loading posts...</div>
+            </div>
+          ) : activeTab === 'lost' ? (
+            lostPosts?.map((post) => <Post key={post.id} {...post} />)
+          ) : (
+            foundPosts?.map((post) => <Post key={post.id} {...post} />)
+          )}
+          {lostPosts?.length || foundPosts?.length ? (
+            <div className='h-10'>
+              <div className='flex h-full w-full items-center justify-center'>
+                <Button variant='outline' size='sm'>
+                  {activeTab === 'lost'
+                    ? 'Load more lost posts'
+                    : 'Load more found posts'}
+                </Button>
+              </div>
+            </div>
+          ) : null}
         </div>
       </main>
       <div className='sticky bottom-0 left-0 z-50 w-full'>
