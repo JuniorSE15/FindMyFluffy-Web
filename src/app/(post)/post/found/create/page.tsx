@@ -9,25 +9,27 @@ import { z } from 'zod';
 import { Form } from '@/components/ui/form';
 import { useState, useEffect } from 'react';
 import { submitFoundPetPostAction } from '@/services/post.service';
-import { toast } from 'sonner';
 import { getSessionAction } from '@/services/auth.service';
+import { toast } from 'sonner';
 
 export default function FoundReportPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [userId, setUserId] = useState<string | null>(null);
+  const [userId, setUserId] = useState('');
   const form = useForm<z.infer<typeof FormPostFoundSchema>>({
     resolver: zodResolver(FormPostFoundSchema),
     defaultValues: {
       title: '',
       breed: '',
       gender: 'Unknown',
-      petType: '',
+      type: '',
       images: [],
       description: '',
       lastSeenLocation: '',
-      dateFound: '',
-      timeFound: '',
-      socialMediaLink: '',
+      latitude: undefined,
+      longitude: undefined,
+      date: '',
+      time: '',
+      onlinePost: '',
     },
   });
   const router = useRouter();
@@ -41,21 +43,13 @@ export default function FoundReportPage() {
         }
       } catch (error) {
         console.error('Failed to get user session:', error);
-        // Redirect to login if not authenticated
-        router.push('/signin');
       }
     };
 
     getUserSession();
-  }, [router]);
+  }, []);
 
   const onSubmit = async (data: z.infer<typeof FormPostFoundSchema>) => {
-    if (!userId) {
-      toast.error('You must be logged in to submit a report');
-      router.push('/signin');
-      return;
-    }
-
     try {
       setIsSubmitting(true);
       console.log('Form submitted:', data);
@@ -70,29 +64,6 @@ export default function FoundReportPage() {
       }
     } catch (error) {
       console.error('Submission error:', error);
-      let errorMessage = 'Failed to submit report. Please try again.';
-
-      if (error instanceof Error) {
-        if (error.message.includes('Validation errors:')) {
-          errorMessage = error.message;
-        } else if (
-          error.message.includes('401') ||
-          error.message.includes('Unauthorized')
-        ) {
-          errorMessage = 'Your session has expired. Please log in again.';
-          router.push('/signin');
-          return;
-        } else if (error.message.includes('400')) {
-          errorMessage =
-            'Invalid data submitted. Please check your inputs and try again.';
-        } else if (error.message.includes('500')) {
-          errorMessage = 'Server error occurred. Please try again later.';
-        } else {
-          errorMessage = error.message;
-        }
-      }
-
-      alert(errorMessage);
     } finally {
       setIsSubmitting(false);
     }

@@ -49,8 +49,8 @@ export type FoundPetPostFormData = {
   description?: string;
   onlinePost?: string;
   isLost: boolean;
-  latitude?: number;
-  longitude?: number;
+  latitude: number;
+  longitude: number;
   postDatetime: string;
   images?: File[];
 };
@@ -88,8 +88,8 @@ export type LostPetPostFormData = {
   onlinePost?: string;
   isLost: boolean;
   bounty?: number;
-  latitude?: number;
-  longitude?: number;
+  latitude: number;
+  longitude: number;
   postDatetime: string;
   images?: File[];
 };

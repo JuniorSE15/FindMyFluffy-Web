@@ -100,7 +100,7 @@ export default function LostPetDetailsForm({ form }: LostPetDetailsFormProps) {
         <div className='mt-2 flex w-full flex-col gap-4'>
           <FormField
             control={form.control}
-            name='petName'
+            name='name'
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Pet Name</FormLabel>
@@ -118,7 +118,7 @@ export default function LostPetDetailsForm({ form }: LostPetDetailsFormProps) {
           />
           <FormField
             control={form.control}
-            name='petType'
+            name='type'
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Pet Type</FormLabel>
@@ -280,8 +280,8 @@ export default function LostPetDetailsForm({ form }: LostPetDetailsFormProps) {
                       form.setValue('lastSeenLocation', address)
                     }
                     onLatLngChange={(latLng) => {
-                      form.setValue('lastSeenLat', latLng.lat);
-                      form.setValue('lastSeenLng', latLng.lng);
+                      form.setValue('latitude', latLng.lat);
+                      form.setValue('longitude', latLng.lng);
                     }}
                   />
                 </div>
@@ -292,7 +292,7 @@ export default function LostPetDetailsForm({ form }: LostPetDetailsFormProps) {
           <div className='grid grid-cols-2 gap-4'>
             <FormField
               control={form.control}
-              name='dateLost'
+              name='date'
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Date Lost</FormLabel>
@@ -311,7 +311,7 @@ export default function LostPetDetailsForm({ form }: LostPetDetailsFormProps) {
             />
             <FormField
               control={form.control}
-              name='timeLost'
+              name='time'
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Time Lost</FormLabel>
@@ -329,7 +329,7 @@ export default function LostPetDetailsForm({ form }: LostPetDetailsFormProps) {
           </div>
           <FormField
             control={form.control}
-            name='socialMediaLink'
+            name='onlinePost'
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Social Media Link (Optional)</FormLabel>
