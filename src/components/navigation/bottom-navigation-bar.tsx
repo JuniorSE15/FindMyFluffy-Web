@@ -35,7 +35,7 @@ const BUTTOM_NAVBAR_ITEMS = [
     label: 'Account',
     icon: <UserIcon className='text-secondary-text' />,
     activeIcon: <UserIcon className='text-interface-secondary' />,
-    href: '/account',
+    href: '/profile',
   },
 ];
 

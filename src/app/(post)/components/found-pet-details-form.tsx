@@ -101,7 +101,7 @@ export default function FoundPetDetailsForm({
         <div className='mt-2 flex w-full flex-col gap-4'>
           <FormField
             control={form.control}
-            name='petType'
+            name='type'
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Pet Type</FormLabel>
@@ -221,8 +221,8 @@ export default function FoundPetDetailsForm({
                       form.setValue('lastSeenLocation', address)
                     }
                     onLatLngChange={(latLng) => {
-                      form.setValue('lastSeenLat', latLng.lat);
-                      form.setValue('lastSeenLng', latLng.lng);
+                      form.setValue('latitude', latLng.lat);
+                      form.setValue('longitude', latLng.lng);
                     }}
                   />
                 </div>
@@ -233,7 +233,7 @@ export default function FoundPetDetailsForm({
           <div className='grid grid-cols-2 gap-4'>
             <FormField
               control={form.control}
-              name='dateFound'
+              name='date'
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Date Found</FormLabel>
@@ -252,7 +252,7 @@ export default function FoundPetDetailsForm({
             />
             <FormField
               control={form.control}
-              name='timeFound'
+              name='time'
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Time Found</FormLabel>
@@ -270,7 +270,7 @@ export default function FoundPetDetailsForm({
           </div>
           <FormField
             control={form.control}
-            name='socialMediaLink'
+            name='onlinePost'
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Social Media Link (Optional)</FormLabel>

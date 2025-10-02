@@ -17,8 +17,8 @@ async function getSession(): Promise<Session | null> {
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
-  //   const isPublicRoute = PUBLIC_ROUTES.includes(pathname);
-  const isPublicRoute = true;
+  const isPublicRoute = PUBLIC_ROUTES.includes(pathname);
+  // const isPublicRoute = true;
   const isAuthenticated = request.cookies.get('access_token')?.value;
 
   // If it's a public route, allow access without session validation

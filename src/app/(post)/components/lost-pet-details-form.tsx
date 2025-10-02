@@ -22,8 +22,6 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import UploadPicture from './upload-picture';
 import 'leaflet/dist/leaflet.css';
-import { Button } from '@/components/ui/button';
-import { CalendarIcon } from 'lucide-react';
 
 import dynamic from 'next/dynamic';
 
@@ -102,7 +100,7 @@ export default function LostPetDetailsForm({ form }: LostPetDetailsFormProps) {
         <div className='mt-2 flex w-full flex-col gap-4'>
           <FormField
             control={form.control}
-            name='petName'
+            name='name'
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Pet Name</FormLabel>
@@ -120,7 +118,7 @@ export default function LostPetDetailsForm({ form }: LostPetDetailsFormProps) {
           />
           <FormField
             control={form.control}
-            name='petType'
+            name='type'
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Pet Type</FormLabel>
@@ -174,9 +172,10 @@ export default function LostPetDetailsForm({ form }: LostPetDetailsFormProps) {
                     placeholder='e.g., 3'
                     min='1'
                     {...field}
+                    value={field.value ?? ''}
                     onChange={(e) =>
                       field.onChange(
-                        e.target.value ? parseInt(e.target.value) : '',
+                        e.target.value ? parseInt(e.target.value) : undefined,
                       )
                     }
                   />
@@ -281,8 +280,8 @@ export default function LostPetDetailsForm({ form }: LostPetDetailsFormProps) {
                       form.setValue('lastSeenLocation', address)
                     }
                     onLatLngChange={(latLng) => {
-                      form.setValue('lastSeenLat', latLng.lat);
-                      form.setValue('lastSeenLng', latLng.lng);
+                      form.setValue('latitude', latLng.lat);
+                      form.setValue('longitude', latLng.lng);
                     }}
                   />
                 </div>
@@ -293,7 +292,7 @@ export default function LostPetDetailsForm({ form }: LostPetDetailsFormProps) {
           <div className='grid grid-cols-2 gap-4'>
             <FormField
               control={form.control}
-              name='dateLost'
+              name='date'
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Date Lost</FormLabel>
@@ -312,7 +311,7 @@ export default function LostPetDetailsForm({ form }: LostPetDetailsFormProps) {
             />
             <FormField
               control={form.control}
-              name='timeLost'
+              name='time'
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Time Lost</FormLabel>
@@ -330,7 +329,7 @@ export default function LostPetDetailsForm({ form }: LostPetDetailsFormProps) {
           </div>
           <FormField
             control={form.control}
-            name='socialMediaLink'
+            name='onlinePost'
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Social Media Link (Optional)</FormLabel>
@@ -341,6 +340,36 @@ export default function LostPetDetailsForm({ form }: LostPetDetailsFormProps) {
                     placeholder='https://facebook.com/post/123'
                     {...field}
                   />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name='bounty'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Bounty (Optional)</FormLabel>
+                <FormControl>
+                  <div className='relative'>
+                    <Input
+                      type='number'
+                      className='bg-accent rounded-xl pr-8'
+                      placeholder='e.g., 50'
+                      min='0'
+                      {...field}
+                      value={field.value ?? ''}
+                      onChange={(e) =>
+                        field.onChange(
+                          e.target.value ? parseInt(e.target.value) : undefined,
+                        )
+                      }
+                    />
+                    <span className='absolute top-1/2 right-3 -translate-y-1/2 text-gray-500'>
+                      ฿
+                    </span>
+                  </div>
                 </FormControl>
                 <FormMessage />
               </FormItem>

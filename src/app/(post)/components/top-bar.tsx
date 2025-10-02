@@ -33,7 +33,7 @@ export const TopBarPostForm = ({
   };
 
   return (
-    <div className='flex h-16 w-full max-w-xl items-center justify-between bg-white px-2 py-2'>
+    <div className='flex h-16 w-full max-w-xl flex-shrink-0 items-center justify-between bg-white px-2 py-2 shadow-sm'>
       {/* Cross button on the left */}
       <Button
         variant='ghost'
