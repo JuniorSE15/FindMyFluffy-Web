@@ -5,8 +5,8 @@ import { BottomNavigationBar } from '@/components/navigation/bottom-navigation-b
 import { TopNavigationBar } from '@/components/navigation/top-navigation-bar';
 import { Post } from '@/components/post/post';
 import { useFoundPosts, useLostPosts } from '@/hooks/usePost';
-import { Loader2Icon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { PostsSkeleton } from '@/components/post/posts-skeleton';
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<'lost' | 'found'>('lost');
@@ -26,10 +26,7 @@ export default function Home() {
       <main className='flex-1 overflow-hidden'>
         <div className='h-full space-y-4 overflow-y-auto scroll-smooth p-4'>
           {lostPostsLoading || foundPostsLoading ? (
-            <div className='flex h-full w-full items-center justify-center gap-2'>
-              <Loader2Icon className='animate-spin' />
-              <div className='text-center'>Loading posts...</div>
-            </div>
+            <PostsSkeleton />
           ) : activeTab === 'lost' ? (
             lostPosts?.map((post) => <Post key={post.id} {...post} />)
           ) : (

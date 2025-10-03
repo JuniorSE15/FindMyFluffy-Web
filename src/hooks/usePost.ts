@@ -1,4 +1,4 @@
-import { getPostsAction } from '@/services/post.service';
+import { getPostByIdAction, getPostsAction } from '@/services/post.service';
 import {
   FoundPetPostResponse,
   LostPetPostResponse,
@@ -10,18 +10,25 @@ export type UseLostPostsReturn = {
   posts: LostPetPostResponse[] | undefined;
   isLoading: boolean;
   error: Error | null;
+  postQueryById: LostPetPostResponse | undefined;
+  isLoadingPostById: boolean;
+  errorPostById: Error | null;
 };
 
 export type UseFoundPostsReturn = {
   posts: FoundPetPostResponse[] | undefined;
   isLoading: boolean;
   error: Error | null;
+  postQueryById: FoundPetPostResponse | undefined;
+  isLoadingPostById: boolean;
+  errorPostById: Error | null;
 };
 
 export const useLostPosts = ({
   limit = 10,
   userId,
   isLost = true,
+  postId = undefined,
 }: PostQueryParams = {}): UseLostPostsReturn => {
   const {
     data: posts,
@@ -34,7 +41,6 @@ export const useLostPosts = ({
       if (!posts) {
         throw new Error('Posts not found');
       }
-      console.log('lost posts', posts);
       return posts as LostPetPostResponse[];
     },
     enabled: isLost,
@@ -46,13 +52,40 @@ export const useLostPosts = ({
     refetchInterval: 1000 * 60 * 5,
   });
 
-  return { posts, isLoading, error };
+  const {
+    data: postQueryById,
+    isLoading: isLoadingPostById,
+    error: errorPostById,
+  } = useQuery<LostPetPostResponse>({
+    queryKey: ['post', postId],
+    queryFn: async () => {
+      const post = await getPostByIdAction(postId as string);
+      return post as LostPetPostResponse;
+    },
+    enabled: !!postId,
+    staleTime: 1000 * 60 * 5,
+    gcTime: 1000 * 60 * 5,
+    refetchOnWindowFocus: true,
+    refetchOnMount: true,
+    refetchOnReconnect: true,
+    refetchInterval: 1000 * 60 * 5,
+  });
+
+  return {
+    posts,
+    isLoading,
+    error,
+    postQueryById,
+    isLoadingPostById,
+    errorPostById,
+  };
 };
 
 export const useFoundPosts = ({
   limit = 10,
   isLost = false,
   userId,
+  postId = undefined,
 }: PostQueryParams = {}): UseFoundPostsReturn => {
   const {
     data: posts,
@@ -65,7 +98,6 @@ export const useFoundPosts = ({
       if (!posts) {
         throw new Error('Posts not found');
       }
-      console.log('found posts', posts);
       return posts as FoundPetPostResponse[];
     },
     enabled: isLost,
@@ -76,5 +108,32 @@ export const useFoundPosts = ({
     refetchOnReconnect: true,
     refetchInterval: 1000 * 60 * 5,
   });
-  return { posts, isLoading, error };
+
+  const {
+    data: postQueryById,
+    isLoading: isLoadingPostById,
+    error: errorPostById,
+  } = useQuery<FoundPetPostResponse>({
+    queryKey: ['post', postId],
+    queryFn: async () => {
+      const post = await getPostByIdAction(postId as string);
+      return post as FoundPetPostResponse;
+    },
+    enabled: !!postId,
+    staleTime: 1000 * 60 * 5,
+    gcTime: 1000 * 60 * 5,
+    refetchOnWindowFocus: true,
+    refetchOnMount: true,
+    refetchOnReconnect: true,
+    refetchInterval: 1000 * 60 * 5,
+  });
+
+  return {
+    posts,
+    isLoading,
+    error,
+    postQueryById,
+    isLoadingPostById,
+    errorPostById,
+  };
 };

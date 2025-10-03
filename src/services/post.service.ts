@@ -200,3 +200,31 @@ export async function getPostsAction(isLost: boolean) {
     throw error;
   }
 }
+
+export async function getPostByIdAction<
+  T extends LostPetPostResponse | FoundPetPostResponse,
+>(postId: string) {
+  try {
+    if (!postId) {
+      throw new Error('Post ID is required');
+    }
+
+    const response = await baseApiAction<T>(`/api/posts/${postId}`, {
+      method: 'GET',
+      requiresAuth: true,
+    });
+
+    if (response.error) {
+      throw new Error(response.error.message);
+    }
+
+    if (!response.data) {
+      throw new Error('No data received from API');
+    }
+
+    return response.data;
+  } catch (error) {
+    console.error('Error in getPostByIdAction:', error);
+    throw error;
+  }
+}

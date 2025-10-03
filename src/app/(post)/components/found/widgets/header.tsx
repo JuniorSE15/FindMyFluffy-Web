@@ -8,17 +8,18 @@ import {
   ChevronLeft,
   ChevronRight,
 } from 'lucide-react';
-import { type Post } from '@/types/post';
+import { FoundPetPostResponse } from '@/types/post';
 import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { makeTimeAgo } from '@/utils/date';
 
-type Props = { post: Post };
+type Props = { post: FoundPetPostResponse };
 
 export function FoundHeader({ post }: Props) {
   const router = useRouter();
   const title = `I found this pet`;
   const tag = 'Found';
-  const images =
-    post.images && post.images.length > 0 ? post.images : [post.image];
+  const images = ['/images/onboarding/pet.svg'];
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const hasMultiple = images.length > 1;
@@ -30,21 +31,24 @@ export function FoundHeader({ post }: Props) {
   return (
     <div className='bg-white'>
       {/* Top bar with back button */}
-      <div className='flex items-center justify-between px-4 pt-4'>
-        <button
-          type='button'
+      <div className='flex h-16 items-center justify-between px-2 py-2 shadow-sm'>
+        <Button
+          variant='ghost'
+          size='sm'
           onClick={() => router.back()}
           className='flex items-center gap-1 text-sm text-gray-700 hover:text-gray-900'
           aria-label='Go back'
         >
-          <ArrowLeft className='h-5 w-5' />
-        </button>
+          <ChevronLeft className='h-5 w-5' />
+        </Button>
       </div>
 
       {/* Title & time on same row */}
-      <div className='flex items-center justify-between px-4 pb-1'>
+      <div className='mt-6 flex items-center justify-between px-4 pb-1'>
         <h1 className='text-xl font-semibold text-gray-900'>{title}</h1>
-        <span className='text-sm text-gray-500'>{post.timeAgo ?? ''}</span>
+        <span className='text-sm text-gray-500'>
+          {makeTimeAgo(post.postDatetime)}
+        </span>
       </div>
 
       {/* Tag */}
@@ -94,7 +98,7 @@ export function FoundHeader({ post }: Props) {
         <div className='flex items-center justify-between'>
           <div className='flex items-center space-x-1'>
             <AlertCircle className='h-5 w-5 text-gray-400' />
-            <span className='text-sm text-gray-500'>{post.reports ?? 0}</span>
+            <span className='text-sm text-gray-500'>{0}</span>
           </div>
           <Share className='h-5 w-5 text-gray-400' />
         </div>

@@ -1,9 +1,9 @@
-import { type LostPost, type Post } from '@/types/post';
+import { genderMap, LostPetPostResponse } from '@/types/post';
 import { PawPrint, BadgePercent, Hourglass, Venus, Cpu } from 'lucide-react';
 
-type Props = { post: Post; lost?: LostPost };
+type Props = { post: LostPetPostResponse };
 
-export function LostCharacteristics({ post, lost }: Props) {
+export function LostCharacteristics({ post }: Props) {
   return (
     <div className='bg-white px-4 py-4'>
       <div className='mb-3 text-sm font-medium text-gray-900'>
@@ -47,7 +47,7 @@ export function LostCharacteristics({ post, lost }: Props) {
             <span>Gender</span>
           </div>
           <div className='font-semibold text-gray-900 capitalize'>
-            {post.gender}
+            {genderMap[post.gender]}
           </div>
         </div>
       </div>
@@ -62,7 +62,7 @@ export function LostCharacteristics({ post, lost }: Props) {
             <span>Microchip ID</span>
           </div>
           <div className='font-semibold text-gray-900'>
-            {lost?.microchip ?? '—'}
+            {post.microchip ?? ''}
           </div>
         </div>
       </div>

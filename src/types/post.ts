@@ -29,8 +29,8 @@ export type FoundPetPostResponse = {
   title: string;
   type: string;
   breed?: string;
-  gender: number;
-  description?: string;
+  gender: keyof typeof genderMap;
+  description: string;
   image?: string;
   onlinePost?: string;
   isLost: boolean;
@@ -65,9 +65,9 @@ export type LostPetPostResponse = {
   type: string;
   breed?: string;
   age?: number;
-  gender: number;
+  gender: keyof typeof genderMap;
   microchip?: string;
-  description?: string;
+  description: string;
   onlinePost?: string;
   isLost: boolean;
   bounty?: number;
@@ -100,4 +100,11 @@ export type PostQueryParams = {
   isLost?: boolean;
   limit?: number;
   userId?: string;
+  postId?: string;
+};
+
+export const genderMap = {
+  1000: 'unknown',
+  1001: 'male',
+  1002: 'female',
 };

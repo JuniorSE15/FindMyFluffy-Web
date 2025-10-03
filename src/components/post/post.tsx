@@ -10,7 +10,9 @@ export function Post(data: LostPetPostResponse | FoundPetPostResponse) {
 
   const title = data.isLost ? `${petName}!` : `${petName}`;
   const tag = data.isLost ? `Lost ${data.type}` : `Found ${data.type}`;
-  const href = data.isLost ? `/post/lost/${data.id}` : `/post/found/${data.id}`;
+  const href = data.isLost
+    ? `/post/lost/${data.postId}`
+    : `/post/found/${data.postId}`;
 
   return (
     <div className='bg-white'>
