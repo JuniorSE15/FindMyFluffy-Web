@@ -8,6 +8,7 @@ import {
   FoundPetPostResponse,
   LostPetPostFormData,
   LostPetPostResponse,
+  PostQueryParams,
 } from '@/types/post';
 
 export type ApiResponse<T> = {
@@ -178,14 +179,33 @@ export async function submitLostPetPostAction(
   }
 }
 
-export async function getPostsAction(isLost: boolean) {
-  try {
-    const queryParams = new URLSearchParams();
-    queryParams.set('isLost', isLost.toString());
+function buildQueryParams(postQueryParams: PostQueryParams): URLSearchParams {
+  const queryParams = new URLSearchParams();
+  if (postQueryParams.isLost !== undefined && postQueryParams.isLost !== null) {
+    queryParams.set('isLost', postQueryParams.isLost.toString());
+  }
+  if (postQueryParams.skip !== undefined && postQueryParams.skip !== null) {
+    queryParams.set('skip', postQueryParams.skip.toString());
+  }
+  if (postQueryParams.take !== undefined && postQueryParams.take !== null) {
+    queryParams.set('take', postQueryParams.take.toString());
+  }
+  if (postQueryParams.userId) {
+    queryParams.set('userId', postQueryParams.userId);
+  }
+  if (postQueryParams.postId) {
+    queryParams.set('postId', postQueryParams.postId);
+  }
+  return queryParams;
+}
 
-    const response = await baseApiAction<
-      LostPetPostResponse[] | FoundPetPostResponse[]
-    >(`/api/posts?${queryParams}`, {
+export async function getPostsAction<
+  T extends LostPetPostResponse | FoundPetPostResponse,
+>(postQueryParams: PostQueryParams): Promise<T[]> {
+  try {
+    const queryParams = buildQueryParams(postQueryParams);
+
+    const response = await baseApiAction<T[]>(`/api/posts?${queryParams}`, {
       method: 'GET',
       requiresAuth: true,
     });
@@ -194,7 +214,7 @@ export async function getPostsAction(isLost: boolean) {
       throw new Error(response.error.message);
     }
 
-    return response.data;
+    return response.data as T[];
   } catch (error) {
     console.error('Error getting posts:', error);
     throw error;
@@ -203,7 +223,7 @@ export async function getPostsAction(isLost: boolean) {
 
 export async function getPostByIdAction<
   T extends LostPetPostResponse | FoundPetPostResponse,
->(postId: string) {
+>(postId: string): Promise<T> {
   try {
     if (!postId) {
       throw new Error('Post ID is required');

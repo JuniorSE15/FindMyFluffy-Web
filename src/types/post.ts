@@ -98,7 +98,8 @@ export type LostPetPostFormData = {
 
 export type PostQueryParams = {
   isLost?: boolean;
-  limit?: number;
+  skip?: number;
+  take?: number;
   userId?: string;
   postId?: string;
 };

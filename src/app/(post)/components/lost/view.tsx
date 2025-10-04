@@ -8,7 +8,7 @@ import { LostReportedSightings } from './widgets/reported-sightings';
 import { LostLocation } from './widgets/location';
 import { LostContact } from './widgets/contact';
 import { LostFooter } from './widgets/footer';
-import { useLostPosts } from '@/hooks/usePost';
+import { useInfiniteLostPosts } from '@/hooks/useInfinitePost';
 import { PostSkeleton } from '../loading/post-skeleton';
 
 type LostPostViewProps = {
@@ -16,9 +16,10 @@ type LostPostViewProps = {
 };
 
 export function LostPostView({ postId }: LostPostViewProps) {
-  const { postQueryById, isLoadingPostById, errorPostById } = useLostPosts({
-    postId: postId,
-  });
+  const { postQueryById, isLoadingPostById, errorPostById } =
+    useInfiniteLostPosts({
+      postId: postId,
+    });
 
   if (isLoadingPostById) {
     return <PostSkeleton />;

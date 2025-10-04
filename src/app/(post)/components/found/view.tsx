@@ -6,7 +6,7 @@ import { FoundDescription } from './widgets/description';
 import { FoundCharacteristics } from './widgets/characteristics';
 import { FoundLocation } from './widgets/location';
 import { FoundContact } from './widgets/contact';
-import { useFoundPosts } from '@/hooks/usePost';
+import { useInfiniteFoundPosts } from '@/hooks/useInfinitePost';
 import { PostSkeleton } from '../loading/post-skeleton';
 
 type FoundPostViewProps = {
@@ -14,9 +14,10 @@ type FoundPostViewProps = {
 };
 
 export function FoundPostView({ postId }: FoundPostViewProps) {
-  const { postQueryById, isLoadingPostById, errorPostById } = useFoundPosts({
-    postId: postId,
-  });
+  const { postQueryById, isLoadingPostById, errorPostById } =
+    useInfiniteFoundPosts({
+      postId: postId,
+    });
 
   if (isLoadingPostById) {
     return <PostSkeleton />;
