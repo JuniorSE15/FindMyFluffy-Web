@@ -18,3 +18,21 @@ export async function getUserByIdAction(userId: string) {
     throw error;
   }
 }
+
+export async function getCurrentUserAction() {
+  try {
+    const response = await baseApiAction<User>('/api/users/current');
+    if (response.error) {
+      throw new Error(response.error.detail);
+    }
+
+    if (!response.data) {
+      throw new Error('No data received from API');
+    }
+
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}

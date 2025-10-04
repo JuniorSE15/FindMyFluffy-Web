@@ -3,4 +3,5 @@ export type User = {
   userName: string;
   email: string;
   phoneNumber: string;
+  point: number;
 };
