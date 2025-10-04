@@ -5,10 +5,9 @@ import { FoundPetPostResponse, LostPetPostResponse } from '@/types/post';
 import { makeTimeAgo } from '@/utils/date';
 
 export function Post(data: LostPetPostResponse | FoundPetPostResponse) {
-  const petName = 'name' in data ? data.name : 'Unknown Pet';
   const bounty = data.isLost && 'bounty' in data ? data.bounty : undefined;
 
-  const title = data.isLost ? `${petName}!` : `${petName}`;
+  const title = data.isLost ? `${data.title}!` : `${data.title}`;
   const tag = data.isLost ? `Lost ${data.type}` : `Found ${data.type}`;
   const href = data.isLost
     ? `/post/lost/${data.postId}`
