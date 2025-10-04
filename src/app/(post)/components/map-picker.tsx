@@ -29,7 +29,6 @@ async function geocodeAddress(address: string): Promise<LatLng | null> {
     )}`,
   );
   const data = await res.json();
-  console.log('data', data);
   if (data && data.length > 0) {
     return new LatLng(parseFloat(data[0].lat), parseFloat(data[0].lon));
   }
@@ -41,7 +40,6 @@ async function reverseGeocode(lat: number, lng: number): Promise<string> {
     `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`,
   );
   const data = await res.json();
-  console.log('data', data);
   return data.display_name || `${lat}, ${lng}`;
 }
 

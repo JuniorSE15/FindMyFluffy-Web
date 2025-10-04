@@ -10,6 +10,7 @@ import { LostContact } from './widgets/contact';
 import { LostFooter } from './widgets/footer';
 import { useInfiniteLostPosts } from '@/hooks/useInfinitePost';
 import { PostSkeleton } from '../loading/post-skeleton';
+import { usePost } from '@/hooks/usePost';
 
 type LostPostViewProps = {
   postId: string;
@@ -20,6 +21,10 @@ export function LostPostView({ postId }: LostPostViewProps) {
     useInfiniteLostPosts({
       postId: postId,
     });
+
+  const { timelines } = usePost({
+    postId: postId,
+  });
 
   if (isLoadingPostById) {
     return <PostSkeleton />;
@@ -48,10 +53,17 @@ export function LostPostView({ postId }: LostPostViewProps) {
         <LostDetail post={postQueryById} />
         <LostDescription description={postQueryById.description} />
         <LostCharacteristics post={postQueryById} />
-        <LostReportedSightings />
-        <LostLocation />
+        <LostReportedSightings postId={postId} />
+
+        {timelines && timelines.length > 0 && (
+          <LostLocation
+            latitude={timelines[timelines.length - 1]?.latitude}
+            longitude={timelines[timelines.length - 1]?.longitude}
+          />
+        )}
+
         <LostContact userId={postQueryById.userId} />
-        <LostFooter />
+        <LostFooter postId={postId} />
       </div>
     </div>
   );
