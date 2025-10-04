@@ -5,14 +5,26 @@ import { ProfileSection } from '../components/profile-section';
 import { TopNavigationBarProfile } from '../components/top-bar';
 import { BottomNavigationBar } from '@/components/navigation/bottom-navigation-bar';
 import { useState } from 'react';
-import { useCurrentUser } from '@/hooks/useCurrentUser';
+import { useQuery } from '@tanstack/react-query';
 import { Post } from '@/components/post/post';
 import { useUserLostPosts, useUserFoundPosts } from '@/hooks/useInfinitePost';
 import { PostsSkeleton } from '@/components/post/posts-skeleton';
+import { getCurrentUserAction } from '@/services/user.service';
 
 export default function ProfilePage() {
   const [activeTab, setActiveTab] = useState<'lost' | 'found'>('lost');
-  const { user, isLoading: userLoading, error: userError } = useCurrentUser();
+
+  async function fetchUser() {
+    const res = await getCurrentUserAction();
+    return res;
+  }
+
+  const { data: user } = useQuery({
+    queryKey: ['currentUser'],
+    queryFn: fetchUser,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    refetchOnWindowFocus: false,
+  });
 
   const {
     posts: lostPosts,
@@ -27,7 +39,7 @@ export default function ProfilePage() {
   } = useUserFoundPosts(user?.id || '');
 
   const currentPosts = activeTab === 'lost' ? lostPosts : foundPosts;
-  const isLoading = userLoading || lostPostsLoading || foundPostsLoading;
+  const isLoading = lostPostsLoading || foundPostsLoading;
 
   return (
     <div className='relative flex h-screen flex-col'>
