@@ -9,7 +9,9 @@ import {
   LostPetPostFormData,
   LostPetPostResponse,
   PostQueryParams,
+  TimelineResponse,
 } from '@/types/post';
+import { ReportSightingSchema } from '@/schemas/report-sighting';
 
 export type ApiResponse<T> = {
   data?: T;
@@ -271,6 +273,65 @@ export async function getUserPostsAction<
     return response.data as T[];
   } catch (error) {
     console.error('Error getting user posts:', error);
+    throw error;
+  }
+}
+
+export async function reportFoundPetPostAction(
+  formData: z.infer<typeof ReportSightingSchema>,
+) {
+  try {
+    const convertedTime = new Date(formData.fnlDatetime).toISOString();
+
+    const formDataPayload = objectToFormData({
+      ...formData,
+      fnlDatetime: convertedTime,
+    });
+
+    const response = await baseApiAction<LostPetPostResponse>(
+      `/api/timelines`,
+      {
+        method: 'POST',
+        body: formDataPayload,
+        requiresAuth: true,
+      },
+    );
+
+    if (response.error) {
+      let errorMessage =
+        response.error.message || 'Failed to report found pet post';
+
+      if (response.error.detail) {
+        errorMessage += '\n\nValidation errors:\n' + response.error.detail;
+      }
+
+      throw new Error(errorMessage);
+    }
+
+    return response.data;
+  } catch (error) {
+    console.error('Error reporting found pet post:', error);
+    throw error;
+  }
+}
+
+export async function getTimelinesAction(postId: string) {
+  try {
+    const response = await baseApiAction<TimelineResponse[]>(
+      `/api/timelines/${postId}`,
+      {
+        method: 'GET',
+        requiresAuth: true,
+      },
+    );
+
+    if (response.error) {
+      throw new Error(response.error.message);
+    }
+
+    return response.data;
+  } catch (error) {
+    console.error('Error getting timelines:', error);
     throw error;
   }
 }

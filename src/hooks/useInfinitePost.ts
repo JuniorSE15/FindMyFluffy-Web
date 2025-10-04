@@ -86,7 +86,7 @@ export const useInfiniteLostPosts = ({
     isLoading: isLoadingPostById,
     error: errorPostById,
   } = useQuery<LostPetPostResponse>({
-    queryKey: ['post', postId],
+    queryKey: ['post', 'lost', postId],
     queryFn: async () => {
       const post = await getPostByIdAction<LostPetPostResponse>(
         postId as string,
@@ -176,7 +176,7 @@ export const useInfiniteFoundPosts = ({
     isLoading: isLoadingPostById,
     error: errorPostById,
   } = useQuery<FoundPetPostResponse>({
-    queryKey: ['post', postId],
+    queryKey: ['post', 'found', postId],
     queryFn: async () => {
       const post = await getPostByIdAction<FoundPetPostResponse>(
         postId as string,

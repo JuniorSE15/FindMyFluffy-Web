@@ -109,3 +109,17 @@ export const genderMap = {
   1001: 'male',
   1002: 'female',
 };
+
+export type TimelineResponse = {
+  id: string;
+  postId: string;
+  userId: string;
+  description: string;
+  latitude: number;
+  longitude: number;
+  fnlDatetime: string;
+};
+
+export type PostTimelineQueryParams = {
+  postId?: string;
+};
