@@ -51,7 +51,7 @@ export default function ProfilePage() {
           username={user?.userName || 'Username'}
           email={user?.email || 'Email'}
           profilePictureUrl='https://i.sstatic.net/frlIf.png'
-          socialCredits={user?.point || 0}
+          socialCredits={0}
           creditsEarned={user?.point || 0}
         />
         <ProfilePostNavBar activeTab={activeTab} setActiveTab={setActiveTab} />

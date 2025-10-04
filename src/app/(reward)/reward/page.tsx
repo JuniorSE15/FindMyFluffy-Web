@@ -19,7 +19,8 @@ export default function RewardPage() {
       <main className='flex flex-1 flex-col overflow-hidden'>
         <div className='sticky top-0 z-40 bg-white shadow-sm'>
           <div className='mx-auto max-w-4xl p-4'>
-            <div className='flex items-center justify-between'>
+            {/* Desktop layout */}
+            <div className='hidden items-center justify-between md:flex'>
               <button
                 onClick={() => router.back()}
                 className='flex items-center gap-2 rounded-lg px-3 py-2 text-gray-600 transition-colors hover:bg-gray-100 hover:text-gray-900'
@@ -45,7 +46,7 @@ export default function RewardPage() {
                   <Button
                     variant='outline'
                     size='lg'
-                    className='flex h-full w-full items-center gap-2 rounded-lg px-4 py-2'
+                    className='flex items-center gap-2 rounded-lg px-4 py-2'
                   >
                     <CoinsIcon className='h-4 w-4' />
                     Top-up
@@ -55,10 +56,59 @@ export default function RewardPage() {
                   <Button
                     variant='outline'
                     size='lg'
-                    className='flex h-full w-full items-center gap-2 rounded-lg px-4 py-2'
+                    className='flex items-center gap-2 rounded-lg px-4 py-2'
                   >
                     <Gift className='h-4 w-4' />
                     My Rewards
+                  </Button>
+                </Link>
+              </div>
+            </div>
+
+            {/* Mobile layout */}
+            <div className='space-y-3 md:hidden'>
+              {/* Top row: Back button and Points */}
+              <div className='flex items-center justify-between'>
+                <button
+                  onClick={() => router.back()}
+                  className='flex items-center gap-2 rounded-lg px-3 py-2 text-gray-600 transition-colors hover:bg-gray-100 hover:text-gray-900'
+                >
+                  <ArrowLeft className='h-4 w-4' />
+                  <span className='text-sm font-medium'>Back</span>
+                </button>
+
+                <div className='bg-primary-bg flex items-center gap-2 rounded-lg px-3 py-2'>
+                  <div className='text-xs font-medium text-white'>Points:</div>
+                  <div className='text-xs font-bold text-white'>
+                    {isUserLoading ? (
+                      <Loader2 className='h-3 w-3 animate-spin' />
+                    ) : (
+                      user?.point?.toString().toLocaleString() || '0'
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Bottom row: Action buttons */}
+              <div className='flex items-center gap-2'>
+                <Link href='/topup' className='flex-1'>
+                  <Button
+                    variant='outline'
+                    size='sm'
+                    className='flex w-full items-center justify-center gap-1 rounded-lg px-2 py-2'
+                  >
+                    <CoinsIcon className='h-3 w-3' />
+                    <span className='text-xs'>Top-up</span>
+                  </Button>
+                </Link>
+                <Link href='/reward/redeemed' className='flex-1'>
+                  <Button
+                    variant='outline'
+                    size='sm'
+                    className='flex w-full items-center justify-center gap-1 rounded-lg px-2 py-2'
+                  >
+                    <Gift className='h-3 w-3' />
+                    <span className='text-xs'>My Rewards</span>
                   </Button>
                 </Link>
               </div>

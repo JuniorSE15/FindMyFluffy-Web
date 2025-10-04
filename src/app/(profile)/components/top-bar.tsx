@@ -1,6 +1,8 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
+import { Gift } from 'lucide-react';
 
 export const TopNavigationBarProfile = () => {
   return (
@@ -17,6 +19,14 @@ export const TopNavigationBarProfile = () => {
 
       <div className='text-primary-text flex w-full justify-center text-lg font-bold'>
         Profile
+      </div>
+
+      <div className='absolute right-6 flex cursor-pointer items-center'>
+        <Link href='/reward'>
+          <div className='flex items-center justify-center rounded-lg p-2 transition-colors hover:bg-gray-100'>
+            <Gift className='text-secondary-text h-6 w-6' />
+          </div>
+        </Link>
       </div>
     </nav>
   );
