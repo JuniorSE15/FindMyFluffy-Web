@@ -1,68 +1,42 @@
-export type NotificationType =
-  | 'missing_pet'
-  | 'found_pet'
-  | 'sighting_report'
-  | 'match_alert'
-  | 'bounty_update';
+export const NotificationType = {
+  2000: 'system',
+  2001: 'match',
+  2002: 'comment',
+};
 
-export type NotificationStatus = 'unread' | 'read';
-
-export type BaseNotification = {
-  id: string;
-  type: NotificationType;
-  status: NotificationStatus;
+export type NotificationBase = {
   title: string;
-  message: string;
-  timestamp: string;
-  imageUrl?: string;
-  actionUrl?: string;
+  description: string;
+  createdAt: string;
+  type: keyof typeof NotificationType;
 };
 
-export type MissingPetNotification = BaseNotification & {
-  type: 'missing_pet';
-  petId: number;
-  petName: string;
-  petType: string;
-  location: string;
-  bounty?: number;
+export type SystemNotification = NotificationBase & {
+  title: string;
+  description: string;
+  createdAt: string;
+  type: (typeof NotificationType)[2000];
 };
 
-export type FoundPetNotification = BaseNotification & {
-  type: 'found_pet';
-  petId: number;
-  petType: string;
-  location: string;
-  finderName: string;
+export type MatchNotification = NotificationBase & {
+  title: string;
+  description: string;
+  createdAt: string;
+  type: (typeof NotificationType)[2001];
 };
 
-export type SightingReportNotification = BaseNotification & {
-  type: 'sighting_report';
-  petId: number;
-  petName: string;
-  reporterName: string;
-  location: string;
-  confidence: 'low' | 'medium' | 'high';
-};
-
-export type MatchAlertNotification = BaseNotification & {
-  type: 'match_alert';
-  lostPetId: number;
-  foundPetId: number;
-  matchScore: number;
-  location: string;
-};
-
-export type BountyUpdateNotification = BaseNotification & {
-  type: 'bounty_update';
-  petId: number;
-  petName: string;
-  oldBounty?: number;
-  newBounty: number;
+export type CommentNotification = NotificationBase & {
+  title: string;
+  description: string;
+  createdAt: string;
+  type: (typeof NotificationType)[2002];
 };
 
 export type Notification =
-  | MissingPetNotification
-  | FoundPetNotification
-  | SightingReportNotification
-  | MatchAlertNotification
-  | BountyUpdateNotification;
+  | SystemNotification
+  | MatchNotification
+  | CommentNotification;
+
+export type NotificationQueryParams = {
+  userId?: string;
+};

@@ -1,38 +1,27 @@
 import React from 'react';
-import { MapPin, MessageCircle, Heart, RotateCcw } from 'lucide-react';
-import { type NotificationType } from '@/types/notification';
+import { MessageCircle, Heart, RotateCcw } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const NOTIFICATION_CONFIG = {
-  missing_pet: {
-    icon: MapPin,
-    bgColor: 'bg-red-100',
-    iconColor: 'text-red-600',
-  },
-  found_pet: {
-    icon: Heart,
-    bgColor: 'bg-orange-100',
-    iconColor: 'text-orange-600',
-  },
-  sighting_report: {
-    icon: MessageCircle,
-    bgColor: 'bg-blue-100',
-    iconColor: 'text-blue-600',
-  },
-  match_alert: {
-    icon: Heart,
-    bgColor: 'bg-purple-100',
-    iconColor: 'text-purple-600',
-  },
-  bounty_update: {
+  2000: {
     icon: RotateCcw,
     bgColor: 'bg-green-100',
     iconColor: 'text-green-600',
   },
+  2001: {
+    icon: Heart,
+    bgColor: 'bg-purple-100',
+    iconColor: 'text-purple-600',
+  },
+  2002: {
+    icon: MessageCircle,
+    bgColor: 'bg-blue-100',
+    iconColor: 'text-blue-600',
+  },
 };
 
 interface NotificationIconProps {
-  type: NotificationType;
+  type: 2000 | 2001 | 2002;
   className?: string;
 }
 
