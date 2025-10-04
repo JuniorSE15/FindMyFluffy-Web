@@ -2,17 +2,18 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import RewardCard from '../components/reward-card';
-import { ArrowLeft, CoinsIcon, Gift, Loader2 } from 'lucide-react';
+import RedeemedRewardCard from '../../components/redeemed-reward-card';
+import { ArrowLeft, Loader2, Gift, CoinsIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useUser } from '@/hooks/useUser';
-import { useReward } from '@/hooks/useReward';
+import { useUserRewards } from '@/hooks/useUserRewards';
 import { Skeleton } from '@/components/ui/skeleton';
 
-export default function RewardPage() {
+export default function RedeemedRewardsPage() {
   const router = useRouter();
   const { user, isLoading: isUserLoading } = useUser();
-  const { rewards, isRewardsLoading, isRewardsError } = useReward();
+  const { userRewards, isUserRewardsLoading, isUserRewardsError } =
+    useUserRewards();
 
   return (
     <div className='relative flex h-screen flex-col'>
@@ -51,16 +52,6 @@ export default function RewardPage() {
                     Top-up
                   </Button>
                 </Link>
-                <Link href='/reward/redeemed'>
-                  <Button
-                    variant='outline'
-                    size='lg'
-                    className='flex h-full w-full items-center gap-2 rounded-lg px-4 py-2'
-                  >
-                    <Gift className='h-4 w-4' />
-                    My Rewards
-                  </Button>
-                </Link>
               </div>
             </div>
           </div>
@@ -68,7 +59,7 @@ export default function RewardPage() {
 
         <div className='flex-1 overflow-y-auto scroll-smooth p-4'>
           <div className='mx-auto max-w-4xl space-y-4'>
-            {isRewardsLoading ? (
+            {isUserRewardsLoading ? (
               <div className='justify-cente flex h-screen flex-col items-center space-y-4'>
                 <Skeleton className='h-32 w-full rounded-lg' />
                 <Skeleton className='h-32 w-full rounded-lg' />
@@ -76,15 +67,36 @@ export default function RewardPage() {
                 <Skeleton className='h-32 w-full rounded-lg' />
                 <Skeleton className='h-32 w-full rounded-lg' />
               </div>
-            ) : isRewardsError ? (
+            ) : isUserRewardsError ? (
               <div className='flex h-screen items-center justify-center'>
-                <div className='text-gray-500'>Error loading rewards</div>
+                <div className='text-gray-500'>
+                  Error loading redeemed rewards
+                </div>
               </div>
-            ) : (
-              rewards &&
-              rewards.map((reward) => (
-                <RewardCard key={reward.id} reward={reward} />
+            ) : userRewards && userRewards.length > 0 ? (
+              userRewards.map((redeemedReward) => (
+                <RedeemedRewardCard
+                  key={redeemedReward.id}
+                  redeemedReward={redeemedReward}
+                />
               ))
+            ) : (
+              <div className='flex h-screen flex-col items-center justify-center space-y-4'>
+                <div className='flex h-20 w-20 items-center justify-center rounded-full bg-gray-100'>
+                  <Gift className='h-10 w-10 text-gray-400' />
+                </div>
+                <div className='text-center'>
+                  <h3 className='text-lg font-semibold text-gray-900'>
+                    No Redeemed Rewards
+                  </h3>
+                  <p className='text-gray-500'>
+                    You haven&apos;t redeemed any rewards yet.
+                  </p>
+                </div>
+                <Link href='/reward'>
+                  <Button className='mt-4'>Browse Rewards</Button>
+                </Link>
+              </div>
             )}
           </div>
         </div>
