@@ -1,4 +1,5 @@
-import { type LostPost, type Post } from '@/types/post';
+'use client';
+
 import { LostHeader } from './widgets/header';
 import { LostDetail } from './widgets/detail';
 import { LostDescription } from './widgets/description';
@@ -7,23 +8,49 @@ import { LostReportedSightings } from './widgets/reported-sightings';
 import { LostLocation } from './widgets/location';
 import { LostContact } from './widgets/contact';
 import { LostFooter } from './widgets/footer';
+import { useInfiniteLostPosts } from '@/hooks/useInfinitePost';
+import { PostSkeleton } from '../loading/post-skeleton';
 
 type LostPostViewProps = {
-  post: Post;
-  lost?: LostPost;
+  postId: string;
 };
 
-export function LostPostView({ post, lost }: LostPostViewProps) {
+export function LostPostView({ postId }: LostPostViewProps) {
+  const { postQueryById, isLoadingPostById, errorPostById } =
+    useInfiniteLostPosts({
+      postId: postId,
+    });
+
+  if (isLoadingPostById) {
+    return <PostSkeleton />;
+  }
+
+  if (errorPostById) {
+    return (
+      <div className='flex h-screen items-center justify-center'>
+        <p>Error: {errorPostById.message}</p>
+      </div>
+    );
+  }
+
+  if (!postQueryById) {
+    return (
+      <div className='flex h-screen items-center justify-center'>
+        <p>Post not found</p>
+      </div>
+    );
+  }
+
   return (
-    <div className='min-h-screen bg-[#F8F7F4]'>
+    <div className='min-h-screen'>
       <div className='mx-auto'>
-        <LostHeader post={post} lost={lost} />
-        <LostDetail post={post} lost={lost} />
-        <LostDescription post={post} />
-        <LostCharacteristics post={post} lost={lost} />
+        <LostHeader post={postQueryById} />
+        <LostDetail post={postQueryById} />
+        <LostDescription description={postQueryById.description} />
+        <LostCharacteristics post={postQueryById} />
         <LostReportedSightings />
         <LostLocation />
-        <LostContact />
+        <LostContact userId={postQueryById.userId} />
         <LostFooter />
       </div>
     </div>

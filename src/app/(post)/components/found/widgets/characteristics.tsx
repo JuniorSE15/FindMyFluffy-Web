@@ -1,7 +1,7 @@
 import { PawPrint, BadgePercent, Venus } from 'lucide-react';
-import { type Post } from '@/types/post';
+import { FoundPetPostResponse, genderMap } from '@/types/post';
 
-type Props = { post: Post };
+type Props = { post: FoundPetPostResponse };
 
 export function FoundCharacteristics({ post }: Props) {
   return (
@@ -26,7 +26,7 @@ export function FoundCharacteristics({ post }: Props) {
             <BadgePercent className='h-4 w-4 text-orange-500' />
             <span>Breed</span>
           </div>
-          <div className='font-semibold text-gray-900'>{post.breed ?? '—'}</div>
+          <div className='font-semibold text-gray-900'>{post.breed ?? '-'}</div>
         </div>
       </div>
 
@@ -39,7 +39,7 @@ export function FoundCharacteristics({ post }: Props) {
             <span>Gender</span>
           </div>
           <div className='font-semibold text-gray-900 capitalize'>
-            {post.gender}
+            {genderMap[post.gender]}
           </div>
         </div>
       </div>

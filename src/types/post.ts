@@ -29,14 +29,15 @@ export type FoundPetPostResponse = {
   title: string;
   type: string;
   breed?: string;
-  gender: number;
-  description?: string;
+  gender: keyof typeof genderMap;
+  description: string;
   image?: string;
   onlinePost?: string;
   isLost: boolean;
   latitude: number;
   longitude: number;
   postDatetime: string;
+  name: string;
 };
 
 export type FoundPetPostFormData = {
@@ -64,15 +65,16 @@ export type LostPetPostResponse = {
   type: string;
   breed?: string;
   age?: number;
-  gender: number;
+  gender: keyof typeof genderMap;
   microchip?: string;
-  description?: string;
+  description: string;
   onlinePost?: string;
   isLost: boolean;
   bounty?: number;
   latitude: number;
   longitude: number;
   postDatetime: string;
+  returned: boolean;
 };
 
 export type LostPetPostFormData = {
@@ -92,4 +94,18 @@ export type LostPetPostFormData = {
   longitude: number;
   postDatetime: string;
   images?: File[];
+};
+
+export type PostQueryParams = {
+  isLost?: boolean;
+  skip?: number;
+  take?: number;
+  userId?: string;
+  postId?: string;
+};
+
+export const genderMap = {
+  1000: 'unknown',
+  1001: 'male',
+  1002: 'female',
 };

@@ -16,10 +16,11 @@ import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility
 import 'leaflet-defaulticon-compatibility';
 
 const DEFAULT_CENTER = new LatLng(13.736717, 100.523186);
-const TILE_LAYER_URL = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-const ATTRIBUTION =
+export const TILE_LAYER_URL =
+  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+export const ATTRIBUTION =
   '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
-const DEFAULT_ZOOM = 16;
+export const DEFAULT_ZOOM = 16;
 
 export default function MapComponent() {
   const [currentLocation, setCurrentLocation] = useState<LatLng | null>(null);

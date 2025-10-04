@@ -8,6 +8,7 @@ import {
   FoundPetPostResponse,
   LostPetPostFormData,
   LostPetPostResponse,
+  PostQueryParams,
 } from '@/types/post';
 
 export type ApiResponse<T> = {
@@ -174,6 +175,76 @@ export async function submitLostPetPostAction(
     return response.data;
   } catch (error) {
     console.error('Error submitting lost pet post:', error);
+    throw error;
+  }
+}
+
+function buildQueryParams(postQueryParams: PostQueryParams): URLSearchParams {
+  const queryParams = new URLSearchParams();
+  if (postQueryParams.isLost !== undefined && postQueryParams.isLost !== null) {
+    queryParams.set('isLost', postQueryParams.isLost.toString());
+  }
+  if (postQueryParams.skip !== undefined && postQueryParams.skip !== null) {
+    queryParams.set('skip', postQueryParams.skip.toString());
+  }
+  if (postQueryParams.take !== undefined && postQueryParams.take !== null) {
+    queryParams.set('take', postQueryParams.take.toString());
+  }
+  if (postQueryParams.userId) {
+    queryParams.set('userId', postQueryParams.userId);
+  }
+  if (postQueryParams.postId) {
+    queryParams.set('postId', postQueryParams.postId);
+  }
+  return queryParams;
+}
+
+export async function getPostsAction<
+  T extends LostPetPostResponse | FoundPetPostResponse,
+>(postQueryParams: PostQueryParams): Promise<T[]> {
+  try {
+    const queryParams = buildQueryParams(postQueryParams);
+
+    const response = await baseApiAction<T[]>(`/api/posts?${queryParams}`, {
+      method: 'GET',
+      requiresAuth: true,
+    });
+
+    if (response.error) {
+      throw new Error(response.error.message);
+    }
+
+    return response.data as T[];
+  } catch (error) {
+    console.error('Error getting posts:', error);
+    throw error;
+  }
+}
+
+export async function getPostByIdAction<
+  T extends LostPetPostResponse | FoundPetPostResponse,
+>(postId: string): Promise<T> {
+  try {
+    if (!postId) {
+      throw new Error('Post ID is required');
+    }
+
+    const response = await baseApiAction<T>(`/api/posts/${postId}`, {
+      method: 'GET',
+      requiresAuth: true,
+    });
+
+    if (response.error) {
+      throw new Error(response.error.message);
+    }
+
+    if (!response.data) {
+      throw new Error('No data received from API');
+    }
+
+    return response.data;
+  } catch (error) {
+    console.error('Error in getPostByIdAction:', error);
     throw error;
   }
 }

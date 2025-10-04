@@ -1,25 +1,17 @@
 'use client';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import {
-  AlertCircle,
-  Share,
-  ArrowLeft,
-  ChevronLeft,
-  ChevronRight,
-} from 'lucide-react';
-import { type LostPost, type Post } from '@/types/post';
+import { AlertCircle, Share, ChevronLeft, ChevronRight } from 'lucide-react';
+import { LostPetPostResponse } from '@/types/post';
 import { useState } from 'react';
+import { makeTimeAgo } from '@/utils/date';
+import { Button } from '@/components/ui/button';
 
-type Props = { post: Post; lost?: LostPost };
+type Props = { post: LostPetPostResponse };
 
-export function LostHeader({ post, lost }: Props) {
+export function LostHeader({ post }: Props) {
   const router = useRouter();
-  const petName = lost?.name ?? 'my pet';
-  const title = `Help me find ${petName}`;
-  const tag = 'Lost';
-  const images =
-    post.images && post.images.length > 0 ? post.images : [post.image];
+  const images = ['/images/onboarding/pet.svg'];
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const hasMultiple = images.length > 1;
@@ -31,28 +23,31 @@ export function LostHeader({ post, lost }: Props) {
   return (
     <div className='bg-white'>
       {/* Top bar with back button */}
-      <div className='flex items-center justify-between px-4 pt-4'>
-        <button
-          type='button'
+      <div className='flex h-16 items-center justify-between px-2 py-2 shadow-sm'>
+        <Button
+          variant='ghost'
+          size='sm'
           onClick={() => router.back()}
-          className='flex items-center gap-1 text-sm text-gray-700 hover:text-gray-900'
+          className='flex h-10 w-10 items-center gap-1 p-0 text-sm text-gray-700 hover:text-gray-900'
           aria-label='Go back'
         >
-          <ArrowLeft className='h-5 w-5' />
-        </button>
+          <ChevronLeft className='h-5 w-5' />
+        </Button>
         {/* (Removed time from here) */}
       </div>
 
       {/* Title & time on same row */}
-      <div className='flex items-center justify-between px-4 pb-1'>
-        <h1 className='text-xl font-semibold text-gray-900'>{title}</h1>
-        <span className='text-sm text-gray-500'>15 hours ago</span>
+      <div className='mt-6 flex items-center justify-between px-4 pb-1'>
+        <h1 className='text-xl font-semibold text-gray-900'>{post.title}</h1>
+        <span className='text-sm text-gray-500'>
+          {makeTimeAgo(post.postDatetime)}
+        </span>
       </div>
 
       {/* Tag */}
       <div className='px-4 pb-3'>
         <span className='inline-block rounded-full bg-orange-500 px-3 py-1 text-sm font-medium text-white'>
-          {tag}
+          Lost
         </span>
       </div>
 
@@ -61,7 +56,7 @@ export function LostHeader({ post, lost }: Props) {
         <div className='relative h-56 w-full overflow-hidden rounded-lg bg-gray-200'>
           <Image
             src={images[currentIndex]}
-            alt={title}
+            alt={post.title}
             fill
             className='object-cover'
           />
@@ -96,7 +91,7 @@ export function LostHeader({ post, lost }: Props) {
         <div className='flex items-center justify-between'>
           <div className='flex items-center space-x-1'>
             <AlertCircle className='h-5 w-5 text-gray-400' />
-            <span className='text-sm text-gray-500'>{post.reports ?? 0}</span>
+            <span className='text-sm text-gray-500'>{0}</span>
           </div>
           <Share className='h-5 w-5 text-gray-400' />
         </div>
