@@ -1,9 +1,9 @@
-import { rewardType } from '@/types/reward';
 import { Card } from '@/components/ui/card';
 import { Gift } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { Reward } from '@/types/reward.d';
 
-export default function RewardCard({ reward }: { reward: rewardType }) {
+export default function RewardCard({ reward }: { reward: Reward }) {
   const router = useRouter();
 
   const handleClick = () => {
@@ -36,7 +36,13 @@ export default function RewardCard({ reward }: { reward: rewardType }) {
             <div className='text-sm'>
               <span className='text-gray-500'>Points:</span>
               <span className='text-primary-bg ml-1 font-medium'>
-                {reward.points}
+                {reward.point}
+              </span>
+            </div>
+            <div className='text-sm'>
+              <span className='text-gray-500'>Stock:</span>
+              <span className='text-primary-bg ml-1 font-medium'>
+                {reward.stock}
               </span>
             </div>
           </div>
