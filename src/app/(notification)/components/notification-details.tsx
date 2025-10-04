@@ -1,6 +1,51 @@
 import React from 'react';
 import { MapPin, DollarSign } from 'lucide-react';
-import { type Notification } from '@/types/notification';
+
+type Notification = {
+  petName: string;
+  petType: string;
+  location: string;
+  bounty: number;
+  confidence: string;
+};
+
+type FoundPetNotification = Notification & {
+  type: 'found_pet';
+  petName: string;
+  petType: string;
+  location: string;
+  finderName: string;
+};
+
+type MissingPetNotification = Notification & {
+  type: 'missing_pet';
+  petName: string;
+  petType: string;
+  location: string;
+  bounty: number;
+};
+
+type SightingReportNotification = Notification & {
+  type: 'sighting_report';
+  petName: string;
+  location: string;
+  confidence: 'low' | 'medium' | 'high';
+  reporterName: string;
+};
+
+type MatchAlertNotification = Notification & {
+  type: 'match_alert';
+  location: string;
+  matchScore: number;
+  reporterName: string;
+};
+
+type BountyUpdateNotification = Notification & {
+  type: 'bounty_update';
+  petName: string;
+  newBounty: number;
+  oldBounty: number;
+};
 
 // Basic field component for displaying label-value pairs
 export const DetailField: React.FC<{
@@ -79,7 +124,7 @@ export const DetailsGrid: React.FC<{ children: React.ReactNode }> = ({
 
 // Type-specific notification detail components
 export const MissingPetDetails: React.FC<{
-  notification: Extract<Notification, { type: 'missing_pet' }>;
+  notification: MissingPetNotification;
 }> = ({ notification }) => (
   <DetailsGrid>
     <DetailField label='Pet Name'>
@@ -96,7 +141,7 @@ export const MissingPetDetails: React.FC<{
 );
 
 export const FoundPetDetails: React.FC<{
-  notification: Extract<Notification, { type: 'found_pet' }>;
+  notification: FoundPetNotification;
 }> = ({ notification }) => (
   <DetailsGrid>
     <DetailField label='Pet Type'>
@@ -110,7 +155,7 @@ export const FoundPetDetails: React.FC<{
 );
 
 export const SightingReportDetails: React.FC<{
-  notification: Extract<Notification, { type: 'sighting_report' }>;
+  notification: SightingReportNotification;
 }> = ({ notification }) => (
   <DetailsGrid>
     <DetailField label='Pet Name'>
@@ -127,7 +172,7 @@ export const SightingReportDetails: React.FC<{
 );
 
 export const MatchAlertDetails: React.FC<{
-  notification: Extract<Notification, { type: 'match_alert' }>;
+  notification: MatchAlertNotification;
 }> = ({ notification }) => (
   <DetailsGrid>
     <DetailField label='Match Score'>
@@ -138,7 +183,7 @@ export const MatchAlertDetails: React.FC<{
 );
 
 export const BountyUpdateDetails: React.FC<{
-  notification: Extract<Notification, { type: 'bounty_update' }>;
+  notification: BountyUpdateNotification;
 }> = ({ notification }) => (
   <DetailsGrid>
     <DetailField label='Pet Name'>
@@ -152,10 +197,18 @@ export const BountyUpdateDetails: React.FC<{
   </DetailsGrid>
 );
 
+// Union type for all notification types
+type NotificationUnion =
+  | MissingPetNotification
+  | FoundPetNotification
+  | SightingReportNotification
+  | MatchAlertNotification
+  | BountyUpdateNotification;
+
 // Main component that renders the appropriate detail component based on notification type
-export const NotificationDetails: React.FC<{ notification: Notification }> = ({
-  notification,
-}) => {
+export const NotificationDetails: React.FC<{
+  notification: NotificationUnion;
+}> = ({ notification }) => {
   switch (notification.type) {
     case 'missing_pet':
       return <MissingPetDetails notification={notification} />;
