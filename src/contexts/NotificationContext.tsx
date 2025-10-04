@@ -56,7 +56,6 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
   children,
   userId,
 }) => {
-  console.log('userId', userId);
   const [notifications, setNotifications] = useState<Notification[]>([]);
 
   // SSE connection for real-time notifications
@@ -80,8 +79,6 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
   });
 
   const handleIncomingMessage = useCallback((message: SSEMessage) => {
-    console.log('Received SSE message:', message);
-
     // Map server properties to expected format
     const mappedMessage: MappedMessage = {
       title: message.Title || message.title || 'Notification',
@@ -90,8 +87,6 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
         message.CreatedAt || message.createdAt || new Date().toISOString(),
       type: message.Type || message.type || 2000,
     };
-
-    console.log('Mapped message:', mappedMessage);
 
     const notification: Notification = {
       id: mappedMessage.createdAt,
@@ -103,13 +98,10 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
       read: false,
     };
 
-    console.log('Created notification:', notification);
-
     // Add to notifications list
     setNotifications((prev) => [notification, ...prev.slice(0, 49)]); // Keep last 50
 
     // Show toast notification
-    console.log('Showing toast notification for type:', notification.type);
     showToastNotification(notification);
   }, []);
 
