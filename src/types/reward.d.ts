@@ -9,6 +9,7 @@ export type Reward = {
 export type RedeemedReward = {
   id: string;
   rewardId: string;
+  rewardName: string;
   reward: Reward;
   redeemedAt: string;
   amount: number;
