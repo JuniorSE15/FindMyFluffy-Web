@@ -42,7 +42,7 @@ export const ProfileSection = ({
           <span className='text-primary-text text-lg font-bold'>
             {creditsEarned}
           </span>
-          <span className='text-secondary-text text-sm'>Credits</span>
+          <span className='text-secondary-text text-sm'>Points</span>
         </div>
       </div>
     </section>
