@@ -50,7 +50,7 @@ export function FoundPostView({ postId }: FoundPostViewProps) {
           latitude={postQueryById.latitude}
           longitude={postQueryById.longitude}
         />
-        <FoundContact />
+        <FoundContact userId={postQueryById.userId} />
       </div>
     </div>
   );

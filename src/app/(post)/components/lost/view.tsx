@@ -50,7 +50,7 @@ export function LostPostView({ postId }: LostPostViewProps) {
         <LostCharacteristics post={postQueryById} />
         <LostReportedSightings />
         <LostLocation />
-        <LostContact />
+        <LostContact userId={postQueryById.userId} />
         <LostFooter />
       </div>
     </div>
