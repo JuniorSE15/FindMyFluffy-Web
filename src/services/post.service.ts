@@ -248,3 +248,29 @@ export async function getPostByIdAction<
     throw error;
   }
 }
+
+export async function getUserPostsAction<
+  T extends LostPetPostResponse | FoundPetPostResponse,
+>(userId: string): Promise<T[]> {
+  try {
+    if (!userId) {
+      throw new Error('User ID is required');
+    }
+
+    const endpoint = `/user/${userId}`;
+
+    const response = await baseApiAction<T[]>(endpoint, {
+      method: 'GET',
+      requiresAuth: true,
+    });
+
+    if (response.error) {
+      throw new Error(response.error.message);
+    }
+
+    return response.data as T[];
+  } catch (error) {
+    console.error('Error getting user posts:', error);
+    throw error;
+  }
+}

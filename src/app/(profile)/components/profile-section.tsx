@@ -40,9 +40,9 @@ export const ProfileSection = ({
         </div>
         <div className='flex flex-col items-center'>
           <span className='text-primary-text text-lg font-bold'>
-            ${creditsEarned}
+            {creditsEarned}
           </span>
-          <span className='text-secondary-text text-sm'>Credits Earned</span>
+          <span className='text-secondary-text text-sm'>Points</span>
         </div>
       </div>
     </section>

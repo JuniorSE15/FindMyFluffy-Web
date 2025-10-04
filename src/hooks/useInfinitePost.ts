@@ -1,4 +1,8 @@
-import { getPostByIdAction, getPostsAction } from '@/services/post.service';
+import {
+  getPostByIdAction,
+  getPostsAction,
+  getUserPostsAction,
+} from '@/services/post.service';
 import {
   FoundPetPostResponse,
   LostPetPostResponse,
@@ -208,5 +212,59 @@ export const useInfiniteFoundPosts = ({
     postQueryById,
     isLoadingPostById,
     errorPostById,
+  };
+};
+
+// Hook for fetching user's lost posts
+export const useUserLostPosts = (userId: string) => {
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['user-posts', 'lost', userId],
+    queryFn: async () => {
+      const posts = await getUserPostsAction<LostPetPostResponse>(userId);
+      if (!posts) {
+        throw new Error('User posts not found');
+      }
+      // Filter for lost posts only
+      return posts.filter((post) => post.isLost);
+    },
+    enabled: !!userId,
+    staleTime: 1000 * 60 * 5,
+    gcTime: 1000 * 60 * 5,
+    refetchOnWindowFocus: true,
+    refetchOnMount: true,
+    refetchOnReconnect: true,
+  });
+
+  return {
+    posts: data || [],
+    isLoading,
+    error,
+  };
+};
+
+// Hook for fetching user's found posts
+export const useUserFoundPosts = (userId: string) => {
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['user-posts', 'found', userId],
+    queryFn: async () => {
+      const posts = await getUserPostsAction<FoundPetPostResponse>(userId);
+      if (!posts) {
+        throw new Error('User posts not found');
+      }
+      // Filter for found posts only
+      return posts.filter((post) => !post.isLost);
+    },
+    enabled: !!userId,
+    staleTime: 1000 * 60 * 5,
+    gcTime: 1000 * 60 * 5,
+    refetchOnWindowFocus: true,
+    refetchOnMount: true,
+    refetchOnReconnect: true,
+  });
+
+  return {
+    posts: data || [],
+    isLoading,
+    error,
   };
 };
