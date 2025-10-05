@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   getTimelinesAction,
   reportFoundPetPostAction,
+  markPostAsReturnedAction,
 } from '@/services/post.service';
 import { toast } from 'sonner';
 import { PostTimelineQueryParams } from '@/types/post';
@@ -58,11 +59,34 @@ export const usePost = ({ postId }: PostTimelineQueryParams) => {
     },
   });
 
+  const markPostAsReturnedMutation = useMutation({
+    mutationFn: markPostAsReturnedAction,
+    onSuccess: (data) => {
+      // Invalidate and refetch post queries
+      queryClient.invalidateQueries({
+        queryKey: ['post', 'lost'],
+      });
+
+      // Invalidate timelines
+      queryClient.invalidateQueries({
+        queryKey: ['timelines'],
+      });
+
+      toast.success('Pet marked as returned successfully!');
+    },
+    onError: (error) => {
+      toast.error('Failed to mark pet as returned', {
+        description: error.message,
+      });
+    },
+  });
+
   return {
     timelines,
     isTimelinesLoading,
     isTimelinesError,
     refetchTimelines,
     reportFoundPetPostMutation,
+    markPostAsReturnedMutation,
   };
 };

@@ -63,7 +63,7 @@ export function LostPostView({ postId }: LostPostViewProps) {
         )}
 
         <LostContact userId={postQueryById.userId} />
-        <LostFooter postId={postId} />
+        <LostFooter post={postQueryById} />
       </div>
     </div>
   );

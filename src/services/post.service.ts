@@ -335,3 +335,24 @@ export async function getTimelinesAction(postId: string) {
     throw error;
   }
 }
+
+export async function markPostAsReturnedAction(postId: string) {
+  try {
+    const response = await baseApiAction<LostPetPostResponse>(
+      `/api/posts/lost/returned/${postId}`,
+      {
+        method: 'PATCH',
+        requiresAuth: true,
+      },
+    );
+
+    if (response.error) {
+      throw new Error(response.error.message);
+    }
+
+    return response.data;
+  } catch (error) {
+    console.error('Error marking post as returned:', error);
+    throw error;
+  }
+}
