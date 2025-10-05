@@ -129,7 +129,7 @@ export function PointInputForm({ onSubmit, isLoading }: PointInputFormProps) {
                         }}
                       />
                     </FormControl>
-                    <FormDescription>1 Point = ฿1 THB</FormDescription>
+                    <FormDescription>1 Point = ฿5 THB</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
