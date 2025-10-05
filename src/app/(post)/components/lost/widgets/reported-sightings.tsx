@@ -5,7 +5,6 @@ import { GetLocation } from '../../location/get-location';
 import { PostImage } from '@/components/post/post-images-corousel';
 
 export function LostReportedSightings({ postId }: { postId: string }) {
-  console.log('postId', postId);
   const { timelines, isTimelinesLoading } = usePost({
     postId,
   });
