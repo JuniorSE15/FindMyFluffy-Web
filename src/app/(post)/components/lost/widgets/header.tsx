@@ -6,12 +6,13 @@ import { LostPetPostResponse } from '@/types/post';
 import { useState } from 'react';
 import { makeTimeAgo } from '@/utils/date';
 import { Button } from '@/components/ui/button';
+import { PostImage } from '@/components/post/post-images-corousel';
 
 type Props = { post: LostPetPostResponse };
 
 export function LostHeader({ post }: Props) {
   const router = useRouter();
-  const images = ['/images/onboarding/pet.svg'];
+  const images = post.images;
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const hasMultiple = images.length > 1;
@@ -54,12 +55,7 @@ export function LostHeader({ post }: Props) {
       {/* Image carousel */}
       <div className='mb-2 px-4'>
         <div className='relative h-56 w-full overflow-hidden rounded-lg bg-gray-200'>
-          <Image
-            src={images[currentIndex]}
-            alt={post.title}
-            fill
-            className='object-cover'
-          />
+          <PostImage image={images[currentIndex]} />
           {hasMultiple ? (
             <>
               <button

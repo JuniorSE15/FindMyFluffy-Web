@@ -9,4 +9,9 @@ module.exports = {
   images: {
     remotePatterns: [new URL('https://i.sstatic.net/frlIf.png/**')],
   },
+  experimental: {
+    serverActions: {
+      bodySizeLimit: '50mb',
+    },
+  },
 }

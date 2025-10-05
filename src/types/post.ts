@@ -31,7 +31,7 @@ export type FoundPetPostResponse = {
   breed?: string;
   gender: keyof typeof genderMap;
   description: string;
-  image?: string;
+  images: string[];
   onlinePost?: string;
   isLost: boolean;
   latitude: number;
@@ -75,6 +75,7 @@ export type LostPetPostResponse = {
   longitude: number;
   postDatetime: string;
   returned: boolean;
+  images: string[];
 };
 
 export type LostPetPostFormData = {
@@ -118,6 +119,7 @@ export type TimelineResponse = {
   latitude: number;
   longitude: number;
   fnlDatetime: string;
+  images: string[];
 };
 
 export type PostTimelineQueryParams = {

@@ -195,7 +195,7 @@ export const ReportDialog = ({ postId }: ReportDialogProps) => {
             <div className='grid gap-3'>
               <Label htmlFor='images'>Images</Label>
               <UploadPicture
-                maxFiles={1}
+                maxFiles={3}
                 maxFileSize={10}
                 onFilesChange={handleImagesChange}
               />
