@@ -1,25 +1,19 @@
 'use client';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import {
-  AlertCircle,
-  Share,
-  ArrowLeft,
-  ChevronLeft,
-  ChevronRight,
-} from 'lucide-react';
+import { AlertCircle, Share, ChevronLeft, ChevronRight } from 'lucide-react';
 import { FoundPetPostResponse } from '@/types/post';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { makeTimeAgo } from '@/utils/date';
+import { PostImage } from '@/components/post/post-images-corousel';
 
 type Props = { post: FoundPetPostResponse };
 
 export function FoundHeader({ post }: Props) {
   const router = useRouter();
-  const title = `I found this pet`;
   const tag = 'Found';
-  const images = ['/images/onboarding/pet.svg'];
+  const images = post.images;
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const hasMultiple = images.length > 1;
@@ -45,7 +39,7 @@ export function FoundHeader({ post }: Props) {
 
       {/* Title & time on same row */}
       <div className='mt-6 flex items-center justify-between px-4 pb-1'>
-        <h1 className='text-xl font-semibold text-gray-900'>{title}</h1>
+        <h1 className='text-xl font-semibold text-gray-900'>{post.title}</h1>
         <span className='text-sm text-gray-500'>
           {makeTimeAgo(post.postDatetime)}
         </span>
@@ -61,12 +55,7 @@ export function FoundHeader({ post }: Props) {
       {/* Image carousel */}
       <div className='mb-2 px-4'>
         <div className='relative h-56 w-full overflow-hidden rounded-lg bg-gray-200'>
-          <Image
-            src={images[currentIndex]}
-            alt={title}
-            fill
-            className='object-cover'
-          />
+          <PostImage image={images[currentIndex]} />
           {hasMultiple ? (
             <>
               <button

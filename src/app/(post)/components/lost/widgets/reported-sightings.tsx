@@ -2,6 +2,7 @@ import { usePost } from '@/hooks/usePost';
 import { EyeOff } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { GetLocation } from '../../location/get-location';
+import { PostImage } from '@/components/post/post-images-corousel';
 
 export function LostReportedSightings({ postId }: { postId: string }) {
   const { timelines, isTimelinesLoading } = usePost({
@@ -85,6 +86,46 @@ export function LostReportedSightings({ postId }: { postId: string }) {
                       {timeline.description}
                     </p>
                   </div>
+
+                  {/* Images */}
+                  {Array.isArray(timeline.images) &&
+                    timeline.images.length > 0 && (
+                      <div className='mb-4'>
+                        <div className='grid grid-cols-3 gap-2'>
+                          {timeline.images.slice(0, 3).map((img, imgIndex) => {
+                            const isLastVisible =
+                              imgIndex === 2 && timeline.images.length > 3;
+                            const remaining = Math.max(
+                              timeline.images.length - 3,
+                              0,
+                            );
+                            return (
+                              <div
+                                key={img + imgIndex}
+                                className='relative aspect-square overflow-hidden rounded-md'
+                              >
+                                <PostImage
+                                  image={img}
+                                  props={{
+                                    fill: true,
+                                    className: 'object-cover',
+                                    sizes: '(max-width: 768px) 33vw, 200px',
+                                    priority: false,
+                                  }}
+                                />
+                                {isLastVisible && remaining > 0 && (
+                                  <div className='absolute inset-0 flex items-center justify-center bg-black/50'>
+                                    <span className='text-sm font-semibold text-white'>
+                                      +{remaining}
+                                    </span>
+                                  </div>
+                                )}
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    )}
 
                   {/* Location */}
                   <div className='mb-3'>

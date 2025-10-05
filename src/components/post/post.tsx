@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { AlertCircle, Share } from 'lucide-react';
 import { FoundPetPostResponse, LostPetPostResponse } from '@/types/post';
 import { makeTimeAgo } from '@/utils/date';
+import { PostImagesCorousel } from './post-images-corousel';
 
 export function Post(data: LostPetPostResponse | FoundPetPostResponse) {
   const bounty = data.isLost && 'bounty' in data ? data.bounty : undefined;
@@ -45,12 +46,7 @@ export function Post(data: LostPetPostResponse | FoundPetPostResponse) {
       <div className='mb-4'>
         <Link href={href} className='block'>
           <div className='relative h-64 w-full overflow-hidden rounded-lg bg-gray-200'>
-            <Image
-              src={'/images/default-pet.png'}
-              alt={title}
-              fill
-              className='object-cover'
-            />
+            <PostImagesCorousel images={data.images} />
           </div>
         </Link>
       </div>
