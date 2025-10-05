@@ -60,7 +60,6 @@ export async function baseApiAction<T>(
       const cookieStore = await cookies();
       const refreshToken = cookieStore.get('refresh_token')?.value;
       if (refreshToken) {
-        console.log('Refreshing token');
         try {
           const response = await refreshTokenAction();
           if (response?.accessToken?.value && response?.refreshToken?.value) {
