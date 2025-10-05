@@ -11,7 +11,7 @@ export const TopupSchema = z.object({
 export type TopupFormData = z.infer<typeof TopupSchema>;
 
 // Point to Baht conversion rate (1 point = 1 THB)
-export const POINT_TO_BAHT_RATE = 1;
+export const POINT_TO_BAHT_RATE = 5;
 
 // Predefined point packages
 export const POINT_PACKAGES = [

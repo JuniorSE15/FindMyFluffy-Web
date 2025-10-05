@@ -16,7 +16,14 @@ import { useAuthStore } from '@/stores/authStore';
 
 export const useAuth = () => {
   const router = useRouter();
-  const { session, setSession, isAuthenticated, logout } = useAuthStore();
+  const {
+    session,
+    setSession,
+    isAuthenticated,
+    logout,
+    setToken,
+    setIsAuthenticated,
+  } = useAuthStore();
 
   const { mutate: registerMutation, isPending: isRegisterPending } =
     useMutation<void, Error, RegisterRequestDto>({
@@ -59,7 +66,6 @@ export const useAuth = () => {
     onSuccess: async (data) => {
       if (data.accessToken.value && data.refreshToken.value && data.expiresIn) {
         // expires in "01:00:00" format - convert to milliseconds
-        console.log('expiresIn', data.expiresIn);
         const [hours, minutes, seconds] = data.expiresIn.split(':').map(Number);
         const expiresInMs = (hours * 60 * 60 + minutes * 60 + seconds) * 1000;
         const expiresIn = new Date(Date.now() + expiresInMs);
@@ -67,9 +73,8 @@ export const useAuth = () => {
           expires: expiresIn,
         });
         Cookies.set('refresh_token', data.refreshToken.value);
-        // setAccessToken(data.accessToken.value);
-        // setRefreshToken(data.refreshToken.value);
-        // setIsAuthenticated(true);
+        setToken(data.accessToken.value, data.refreshToken.value);
+        setIsAuthenticated(true);
 
         const session = await getSessionAction();
         if (!session) {

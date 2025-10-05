@@ -1,13 +1,15 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Elements, PaymentElement } from '@stripe/react-stripe-js';
+import { PaymentElement } from '@stripe/react-stripe-js';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { TopupFormData } from '@/schemas/topup.schema';
 import { Loader2, ChevronLeft } from 'lucide-react';
 import getStripe from '@/utils/get-stripejs';
 import { useStripePayment } from '@/hooks/useStripePayment';
+import { useRouter } from 'next/navigation';
+import { useAuthStore } from '@/stores/authStore';
 
 // Initialize Stripe
 const stripePromise = getStripe();
@@ -109,32 +111,68 @@ export default function StripeCheckout({
   topupData,
   onCancel,
 }: StripeCheckoutProps) {
-  const [clientSecret, setClientSecret] = useState<string>('');
+  const [url, setUrl] = useState<string>('');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string>('');
+  const router = useRouter();
+  const { accessToken } = useAuthStore();
 
   useEffect(() => {
     // Create PaymentIntent as soon as the component mounts
-    fetch('/api/create-payment-intent', {
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/checkout`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
       },
       body: JSON.stringify({
-        amount: topupData.amount,
-        currency: 'thb',
+        points: topupData.points,
       }),
     })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.error) {
-          setError(data.error);
-        } else {
-          setClientSecret(data.clientSecret);
+      .then(async (res) => {
+        if (!res.ok) {
+          const errText = await res.text().catch(() => '');
+          throw new Error(
+            errText || `Request failed with status ${res.status}`,
+          );
+        }
+
+        const contentType = res.headers.get('content-type') || '';
+        if (contentType.includes('application/json')) {
+          return res.json();
+        }
+
+        const text = await res.text();
+        if (!text) {
+          throw new Error('Empty response from server');
+        }
+
+        try {
+          return JSON.parse(text);
+        } catch {
+          throw new Error('Invalid JSON response from server');
         }
       })
+      .then((data) => {
+        if (data?.error) {
+          setError(data.error);
+          return;
+        }
+
+        if (data?.url) {
+          setUrl(data.url);
+          if (typeof window !== 'undefined') {
+            window.location.href = data.url;
+          } else {
+            router.push(data.url);
+          }
+          return;
+        }
+
+        setError('Missing redirect URL in response');
+      })
       .catch((err) => {
-        setError('Failed to initialize payment');
+        setError(err?.message || 'Failed to initialize payment');
         console.error('Payment initialization error:', err);
       })
       .finally(() => {
@@ -149,7 +187,7 @@ export default function StripeCheckout({
           <div className='space-y-3 text-center'>
             <Loader2 className='mx-auto h-8 w-8 animate-spin' />
             <p className='text-muted-foreground text-sm'>
-              Initializing payment...
+              Redirecting to payment...
             </p>
           </div>
         </CardContent>
@@ -174,7 +212,7 @@ export default function StripeCheckout({
     );
   }
 
-  if (!clientSecret) {
+  if (!url) {
     return (
       <Card className='mx-auto w-full'>
         <CardContent className='py-8'>
@@ -191,20 +229,16 @@ export default function StripeCheckout({
     );
   }
 
-  const options = {
-    clientSecret,
-    appearance: {
-      theme: 'stripe' as const,
-    },
-  };
-
   return (
-    <Elements stripe={stripePromise} options={options}>
-      <CheckoutForm
-        topupData={topupData}
-        clientSecret={clientSecret}
-        onCancel={onCancel}
-      />
-    </Elements>
+    <Card className='mx-auto w-full'>
+      <CardContent className='flex items-center justify-center py-8'>
+        <div className='space-y-3 text-center'>
+          <Loader2 className='mx-auto h-8 w-8 animate-spin' />
+          <p className='text-muted-foreground text-sm'>
+            Redirecting to payment...
+          </p>
+        </div>
+      </CardContent>
+    </Card>
   );
 }
