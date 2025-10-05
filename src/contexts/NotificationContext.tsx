@@ -139,25 +139,25 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
       case 2000:
         toast.success(notification.title, {
           description: notification.message,
-          duration: 5000,
+          duration: 8000,
         });
         break;
       case 2001:
         toast.info(notification.title, {
           description: notification.message,
-          duration: 4000,
+          duration: 8000,
         });
         break;
       case 2002:
         toast(notification.title, {
           description: notification.message,
-          duration: 4000,
+          duration: 8000,
         });
         break;
       default:
         toast(notification.title, {
           description: notification.message,
-          duration: 4000,
+          duration: 8000,
         });
         break;
     }
