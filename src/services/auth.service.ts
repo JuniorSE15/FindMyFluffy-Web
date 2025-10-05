@@ -23,6 +23,7 @@ export async function registerAction(data: RegisterRequestDto) {
     return response.data;
   } catch (error) {
     console.error(error);
+    throw error;
   }
 }
 
