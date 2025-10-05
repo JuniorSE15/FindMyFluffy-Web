@@ -6,13 +6,9 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { TopupFormData } from '@/schemas/topup.schema';
 import { Loader2, ChevronLeft } from 'lucide-react';
-import getStripe from '@/utils/get-stripejs';
 import { useStripePayment } from '@/hooks/useStripePayment';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/stores/authStore';
-
-// Initialize Stripe
-const stripePromise = getStripe();
 
 interface StripeCheckoutProps {
   topupData: TopupFormData;
@@ -25,7 +21,7 @@ interface CheckoutFormProps {
   onCancel: () => void;
 }
 
-function CheckoutForm({ topupData, onCancel }: CheckoutFormProps) {
+export function CheckoutForm({ topupData, onCancel }: CheckoutFormProps) {
   const { isLoading, isPolling, errorMessage, handlePayment } =
     useStripePayment();
 
@@ -178,7 +174,7 @@ export default function StripeCheckout({
       .finally(() => {
         setIsLoading(false);
       });
-  }, [topupData.amount]);
+  }, [topupData.amount, topupData.points, accessToken, onCancel, router]);
 
   if (isLoading) {
     return (

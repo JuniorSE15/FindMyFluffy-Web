@@ -2,7 +2,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { getUserByIdAction } from '@/services/user.service';
 import { User } from '@/types/user';
 import { Mail, Phone, UserCircle } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 interface ContactInfoProps {
   userId: string;
@@ -12,7 +12,7 @@ export const ContactInfo = ({ userId }: ContactInfoProps) => {
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState<User | null>(null);
 
-  const handleGetUser = async () => {
+  const handleGetUser = useCallback(async () => {
     setLoading(true);
     try {
       const user = await getUserByIdAction(userId);
@@ -22,11 +22,11 @@ export const ContactInfo = ({ userId }: ContactInfoProps) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [userId]);
 
   useEffect(() => {
     handleGetUser();
-  }, [userId]);
+  }, [handleGetUser]);
 
   if (loading) {
     return <Skeleton className='h-4 w-full' />;

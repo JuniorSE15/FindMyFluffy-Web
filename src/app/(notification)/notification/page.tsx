@@ -1,6 +1,5 @@
 'use client';
 
-import { useMemo } from 'react';
 import { NotificationItem } from '../components/notification-item';
 import { NotificationListSkeleton } from '../components/notification-skeleton';
 import { useNotification } from '@/hooks/useNotification';

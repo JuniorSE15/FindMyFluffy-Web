@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { reverseGeocode } from '@/services/location.service';
 import { Skeleton } from '@/components/ui/skeleton';
 
@@ -13,7 +13,7 @@ export const GetLocation = ({ latitude, longitude }: LocationProps) => {
   const [loading, setLoading] = useState(false);
   const [location, setLocation] = useState<string | null>(null);
 
-  const handleGetLocation = async () => {
+  const handleGetLocation = useCallback(async () => {
     try {
       // Validate coordinates before making API call
       if (
@@ -46,11 +46,11 @@ export const GetLocation = ({ latitude, longitude }: LocationProps) => {
         setLocation('Location unavailable');
       }
     }
-  };
+  }, [latitude, longitude]);
 
   useEffect(() => {
     handleGetLocation();
-  }, [latitude, longitude]);
+  }, [handleGetLocation]);
 
   if (loading) {
     return <Skeleton className='h-4 w-full' />;

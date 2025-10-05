@@ -1,13 +1,7 @@
 'use client';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import {
-  AlertCircle,
-  Share,
-  ArrowLeft,
-  ChevronLeft,
-  ChevronRight,
-} from 'lucide-react';
+import { AlertCircle, Share, ChevronLeft, ChevronRight } from 'lucide-react';
 import { FoundPetPostResponse } from '@/types/post';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
