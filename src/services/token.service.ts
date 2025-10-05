@@ -1,5 +1,3 @@
-'use server';
-
 import { cookies } from 'next/headers';
 import { AuthResponseDto } from '@/types/auth';
 

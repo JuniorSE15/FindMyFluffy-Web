@@ -1,5 +1,3 @@
-'use server';
-
 import { z } from 'zod';
 import { FormPostFoundSchema, FormPostLostSchema } from '@/schemas/post.schema';
 import { baseApiAction } from './api.service';
