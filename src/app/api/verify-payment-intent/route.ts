@@ -1,7 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 
-const stripe = new Stripe(process.env.NEXT_STRIPE_SECRET_KEY!, {
+const STRIPE_SECRET_KEY =
+  process.env.NEXT_STRIPE_SECRET_KEY ||
+  'pk_test_51SAey1PGBIFVg5QWIipPnrRsMOy4gTFzxtGK9Xn0MceCkoK1VgXV8Vf4IR73MClSdNdMvbG0gOhXGGmX1SGS8JEg00x8rKo7yM';
+
+const stripe = new Stripe(STRIPE_SECRET_KEY, {
   apiVersion: '2025-09-30.clover',
 });
 
