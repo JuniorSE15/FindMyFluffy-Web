@@ -9,7 +9,7 @@ import {
 } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useState, useEffect } from 'react';
-import L, { LatLng } from 'leaflet';
+import { LatLng } from 'leaflet';
 
 import 'leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css';
 import 'leaflet-defaulticon-compatibility';
@@ -74,7 +74,7 @@ function MapController({
         }
       }
     })();
-  }, [address, isSettingFromClick]);
+  }, [address, isSettingFromClick, setPosition, onLatLngChange, map]);
 
   // Reverse geocode on map click
   useMapEvents({

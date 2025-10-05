@@ -1,5 +1,3 @@
-import { FoundPetPostResponse } from '@/types/post';
-
 type Props = { description: string };
 
 export function FoundDescription({ description }: Props) {

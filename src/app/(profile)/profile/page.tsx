@@ -26,17 +26,13 @@ export default function ProfilePage() {
     refetchOnWindowFocus: false,
   });
 
-  const {
-    posts: lostPosts,
-    isLoading: lostPostsLoading,
-    error: lostPostsError,
-  } = useUserLostPosts(user?.id || '');
+  const { posts: lostPosts, isLoading: lostPostsLoading } = useUserLostPosts(
+    user?.id || '',
+  );
 
-  const {
-    posts: foundPosts,
-    isLoading: foundPostsLoading,
-    error: foundPostsError,
-  } = useUserFoundPosts(user?.id || '');
+  const { posts: foundPosts, isLoading: foundPostsLoading } = useUserFoundPosts(
+    user?.id || '',
+  );
 
   const currentPosts = activeTab === 'lost' ? lostPosts : foundPosts;
   const isLoading = lostPostsLoading || foundPostsLoading;

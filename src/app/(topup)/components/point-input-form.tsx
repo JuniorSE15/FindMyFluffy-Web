@@ -35,7 +35,6 @@ export function PointInputForm({ onSubmit, isLoading }: PointInputFormProps) {
     resolver: zodResolver(TopupSchema),
     defaultValues: {
       points: 0,
-      amount: 0,
     },
   });
 

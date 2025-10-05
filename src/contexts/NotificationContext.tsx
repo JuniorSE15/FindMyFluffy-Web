@@ -1,7 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useCallback, useState } from 'react';
-import { useSSE, SSEMessage, SSEMessageType } from '@/hooks/useSSE';
+import { useSSE, SSEMessage } from '@/hooks/useSSE';
 import { toast } from 'sonner';
 
 interface Notification {
@@ -58,26 +58,6 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
 }) => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
 
-  // SSE connection for real-time notifications
-  const { isConnected, isReconnecting, reconnect } = useSSE({
-    url: userId
-      ? `${process.env.NEXT_PUBLIC_API_URL}/api/notifications/subscribe?userId=${userId}`
-      : '',
-    enabled: !!userId,
-    onMessage: useCallback((message: SSEMessage) => {
-      handleIncomingMessage(message);
-    }, []),
-    onError: useCallback((error: Event) => {
-      console.error('SSE Error:', error);
-    }, []),
-    onOpen: useCallback(() => {
-      console.log('SSE Connected');
-    }, []),
-    onClose: useCallback(() => {
-      console.log('SSE Disconnected');
-    }, []),
-  });
-
   const handleIncomingMessage = useCallback((message: SSEMessage) => {
     // Map server properties to expected format
     const mappedMessage: MappedMessage = {
@@ -104,6 +84,29 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
     // Show toast notification
     showToastNotification(notification);
   }, []);
+
+  // SSE connection for real-time notifications
+  const { isConnected, isReconnecting, reconnect } = useSSE({
+    url: userId
+      ? `${process.env.NEXT_PUBLIC_API_URL}/api/notifications/subscribe?userId=${userId}`
+      : '',
+    enabled: !!userId,
+    onMessage: useCallback(
+      (message: SSEMessage) => {
+        handleIncomingMessage(message);
+      },
+      [handleIncomingMessage],
+    ),
+    onError: useCallback((error: Event) => {
+      console.error('SSE Error:', error);
+    }, []),
+    onOpen: useCallback(() => {
+      console.log('SSE Connected');
+    }, []),
+    onClose: useCallback(() => {
+      console.log('SSE Disconnected');
+    }, []),
+  });
 
   const getNotificationTitle = (message: MappedMessage): string => {
     switch (message.type) {
@@ -136,25 +139,25 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({
       case 2000:
         toast.success(notification.title, {
           description: notification.message,
-          duration: 5000,
+          duration: 8000,
         });
         break;
       case 2001:
         toast.info(notification.title, {
           description: notification.message,
-          duration: 4000,
+          duration: 8000,
         });
         break;
       case 2002:
         toast(notification.title, {
           description: notification.message,
-          duration: 4000,
+          duration: 8000,
         });
         break;
       default:
         toast(notification.title, {
           description: notification.message,
-          duration: 4000,
+          duration: 8000,
         });
         break;
     }
