@@ -6,6 +6,7 @@ export type Post = {
   gender: 'male' | 'female' | 'unknown';
   description: string;
   image: string;
+  images?: string[];
   online_post?: string;
   is_lost: boolean;
   timeAgo?: string;
@@ -18,4 +19,109 @@ export type LostPost = {
   bounty?: number;
   microchip?: string;
   returned: boolean;
+};
+
+export type FoundPetPostResponse = {
+  id: string;
+  postId: string;
+  catched: boolean;
+  userId: string;
+  title: string;
+  type: string;
+  breed?: string;
+  gender: keyof typeof genderMap;
+  description: string;
+  images: string[];
+  onlinePost?: string;
+  isLost: boolean;
+  latitude: number;
+  longitude: number;
+  postDatetime: string;
+  name: string;
+};
+
+export type FoundPetPostFormData = {
+  catched: boolean;
+  userId: string;
+  title: string;
+  type: string;
+  breed?: string;
+  gender: number;
+  description?: string;
+  onlinePost?: string;
+  isLost: boolean;
+  latitude: number;
+  longitude: number;
+  postDatetime: string;
+  images?: File[];
+};
+
+export type LostPetPostResponse = {
+  id: string;
+  postId: string;
+  userId: string;
+  title: string;
+  name: string;
+  type: string;
+  breed?: string;
+  age?: number;
+  gender: keyof typeof genderMap;
+  microchip?: string;
+  description: string;
+  onlinePost?: string;
+  isLost: boolean;
+  bounty?: number;
+  latitude: number;
+  longitude: number;
+  postDatetime: string;
+  returned: boolean;
+  images: string[];
+};
+
+export type LostPetPostFormData = {
+  userId: string;
+  title: string;
+  name: string;
+  type: string;
+  breed?: string;
+  age?: number;
+  gender: number;
+  microchip?: string;
+  description?: string;
+  onlinePost?: string;
+  isLost: boolean;
+  bounty?: number;
+  latitude: number;
+  longitude: number;
+  postDatetime: string;
+  images?: File[];
+};
+
+export type PostQueryParams = {
+  isLost?: boolean;
+  skip?: number;
+  take?: number;
+  userId?: string;
+  postId?: string;
+};
+
+export const genderMap = {
+  1000: 'unknown',
+  1001: 'male',
+  1002: 'female',
+};
+
+export type TimelineResponse = {
+  id: string;
+  postId: string;
+  userId: string;
+  description: string;
+  latitude: number;
+  longitude: number;
+  fnlDatetime: string;
+  images: string[];
+};
+
+export type PostTimelineQueryParams = {
+  postId?: string;
 };

@@ -29,12 +29,12 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <div className='flex min-h-screen items-center justify-center'>
-          <div className='w-full max-w-xl flex-col shadow-md'>
+        <div className='min-h-screen overflow-hidden'>
+          <div className='mx-auto h-full w-full max-w-xl shadow-md'>
             <Provider>{children}</Provider>
           </div>
         </div>
-        <Toaster richColors position='bottom-center' />
+        <Toaster richColors position='top-center' />
       </body>
     </html>
   );

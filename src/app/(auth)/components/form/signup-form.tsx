@@ -46,6 +46,7 @@ export function SignUpForm() {
     <Form {...form}>
       <form className='w-full space-y-6' onSubmit={form.handleSubmit(onSubmit)}>
         <FormField
+          control={form.control}
           name='userName'
           render={({ field }) => (
             <FormItem>
@@ -64,6 +65,7 @@ export function SignUpForm() {
           )}
         />
         <FormField
+          control={form.control}
           name='email'
           render={({ field }) => (
             <FormItem>
@@ -82,6 +84,7 @@ export function SignUpForm() {
           )}
         />
         <FormField
+          control={form.control}
           name='password'
           render={({ field }) => (
             <FormItem>
@@ -115,6 +118,7 @@ export function SignUpForm() {
           )}
         />
         <FormField
+          control={form.control}
           name='phoneNumber'
           render={({ field }) => (
             <FormItem>

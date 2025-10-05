@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import { motion } from 'motion/react';
-import { SearchDialog } from '../search/search-diaglog';
+import { SearchDialog } from '../search/search-dialog';
 
 interface TopNavigationBarProps {
   activeTab: 'lost' | 'found';
@@ -57,7 +57,6 @@ export const TopNavigationBar = ({
 };
 
 const Tabs = ({ label, tab, activeTab, setActiveTab }: TabsProps) => {
-    
   return (
     <motion.div
       animate={{

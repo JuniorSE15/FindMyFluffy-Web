@@ -22,6 +22,12 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import UploadPicture from './upload-picture';
 
+import dynamic from 'next/dynamic';
+
+const MapPicker = dynamic(() => import('./map-picker'), {
+  ssr: false,
+});
+
 interface FoundPetDetailsFormProps {
   form: UseFormReturn<z.infer<typeof FormPostFoundSchema>>;
 }
@@ -30,11 +36,38 @@ export default function FoundPetDetailsForm({
   form,
 }: FoundPetDetailsFormProps) {
   const handleImagesChange = (files: File[]) => {
-    form.setValue('Images', files);
+    form.setValue('images', files);
   };
 
   return (
     <>
+      {/* Title Section */}
+      <Card className='mt-6 flex w-full flex-col gap-2 p-4'>
+        <h1 className='text-primary-text text-left text-2xl font-bold'>
+          Post Title
+        </h1>
+        <div className='mt-2 flex w-full flex-col gap-4'>
+          <FormField
+            control={form.control}
+            name='title'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Title</FormLabel>
+                <FormControl>
+                  <Input
+                    type='text'
+                    className='bg-accent rounded-xl'
+                    placeholder='e.g., Found Golden Retriever near Central Park'
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+      </Card>
+
       {/* Upload Pictures Section */}
       <Card className='mt-6 flex w-full flex-col gap-2 p-4'>
         <h1 className='text-primary-text text-left text-2xl font-bold'>
@@ -43,7 +76,7 @@ export default function FoundPetDetailsForm({
         <div className='mt-2 flex w-full flex-col gap-4'>
           <FormField
             control={form.control}
-            name='Images'
+            name='images'
             render={() => (
               <FormItem>
                 <FormControl>
@@ -68,7 +101,7 @@ export default function FoundPetDetailsForm({
         <div className='mt-2 flex w-full flex-col gap-4'>
           <FormField
             control={form.control}
-            name='PetType'
+            name='type'
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Pet Type</FormLabel>
@@ -92,7 +125,7 @@ export default function FoundPetDetailsForm({
           />
           <FormField
             control={form.control}
-            name='Breed'
+            name='breed'
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Breed</FormLabel>
@@ -111,7 +144,7 @@ export default function FoundPetDetailsForm({
           />
           <FormField
             control={form.control}
-            name='Gender'
+            name='gender'
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Gender</FormLabel>
@@ -136,7 +169,7 @@ export default function FoundPetDetailsForm({
           />
           <FormField
             control={form.control}
-            name='Description'
+            name='description'
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Description</FormLabel>
@@ -163,7 +196,7 @@ export default function FoundPetDetailsForm({
         <div className='mt-2 flex w-full flex-col gap-4'>
           <FormField
             control={form.control}
-            name='LastSeenLocation'
+            name='lastSeenLocation'
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Last Seen Location</FormLabel>
@@ -173,8 +206,26 @@ export default function FoundPetDetailsForm({
                     className='bg-accent rounded-xl'
                     placeholder='e.g., Central Park, New York'
                     {...field}
+                    onChange={(e) => {
+                      form.setValue('lastSeenLocation', e.target.value);
+                      window.dispatchEvent(
+                        new CustomEvent('manual-address-edit'),
+                      );
+                    }}
                   />
                 </FormControl>
+                <div className='h-64 w-full overflow-hidden rounded-xl'>
+                  <MapPicker
+                    address={field.value}
+                    onAddressChange={(address) =>
+                      form.setValue('lastSeenLocation', address)
+                    }
+                    onLatLngChange={(latLng) => {
+                      form.setValue('latitude', latLng.lat);
+                      form.setValue('longitude', latLng.lng);
+                    }}
+                  />
+                </div>
                 <FormMessage />
               </FormItem>
             )}
@@ -182,7 +233,7 @@ export default function FoundPetDetailsForm({
           <div className='grid grid-cols-2 gap-4'>
             <FormField
               control={form.control}
-              name='DateLost'
+              name='date'
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Date Found</FormLabel>
@@ -190,6 +241,8 @@ export default function FoundPetDetailsForm({
                     <Input
                       type='date'
                       className='bg-accent rounded-xl'
+                      max={new Date().toISOString().split('T')[0]}
+                      min='2000-01-01'
                       {...field}
                     />
                   </FormControl>
@@ -199,7 +252,7 @@ export default function FoundPetDetailsForm({
             />
             <FormField
               control={form.control}
-              name='TimeLost'
+              name='time'
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Time Found</FormLabel>
@@ -217,7 +270,7 @@ export default function FoundPetDetailsForm({
           </div>
           <FormField
             control={form.control}
-            name='SocialMediaLink'
+            name='onlinePost'
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Social Media Link (Optional)</FormLabel>
