@@ -67,7 +67,6 @@ export const PostImagesCorousel: React.FC<PostImagesCorouselProps> = ({
 };
 
 export const PostImage = ({ image, props }: PostImageProps) => {
-  console.log('image', image);
   const { accessToken } = useAuthStore();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [imageUrl, setImageUrl] = useState<string>('');
